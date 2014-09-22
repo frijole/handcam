@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6214" systemVersion="14A314h" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="14A361c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6207"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -11,31 +10,74 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  Copyright (c) 2014 frijole. All rights reserved." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="8ie-xW-0ye">
-                    <rect key="frame" x="20" y="439" width="441" height="21"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ice lolly" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="kId-c2-rCX">
-                    <rect key="frame" x="20" y="140" width="441" height="43"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
-                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Oj1-vC-8Hr">
+                    <rect key="frame" x="0.0" y="0.0" width="481" height="400"/>
+                    <subviews>
+                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="point-right" translatesAutoresizingMaskIntoConstraints="NO" id="EP0-GM-YHK">
+                            <rect key="frame" x="2" y="192" width="8" height="16"/>
+                            <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        </imageView>
+                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="point-left" translatesAutoresizingMaskIntoConstraints="NO" id="vDp-cV-sOj">
+                            <rect key="frame" x="471" y="192" width="8" height="16"/>
+                            <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        </imageView>
+                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="point-down" translatesAutoresizingMaskIntoConstraints="NO" id="v7m-gA-cUQ">
+                            <rect key="frame" x="233" y="2" width="16" height="8"/>
+                            <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        </imageView>
+                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="point-up" translatesAutoresizingMaskIntoConstraints="NO" id="3bd-qo-SXs">
+                            <rect key="frame" x="233" y="390" width="16" height="8"/>
+                            <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="viewfinderMask" translatesAutoresizingMaskIntoConstraints="NO" id="zbV-Xu-baS">
+                            <rect key="frame" x="0.0" y="0.0" width="479" height="400"/>
+                            <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        </imageView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="EP0-GM-YHK" firstAttribute="leading" secondItem="Oj1-vC-8Hr" secondAttribute="leading" constant="2" id="GEa-2F-CNU"/>
+                        <constraint firstAttribute="bottom" secondItem="zbV-Xu-baS" secondAttribute="bottom" id="H2w-hv-B8c"/>
+                        <constraint firstItem="zbV-Xu-baS" firstAttribute="top" secondItem="Oj1-vC-8Hr" secondAttribute="top" id="It7-wQ-dOf"/>
+                        <constraint firstAttribute="centerX" secondItem="3bd-qo-SXs" secondAttribute="centerX" id="NNM-Vv-Mlk"/>
+                        <constraint firstItem="zbV-Xu-baS" firstAttribute="leading" secondItem="Oj1-vC-8Hr" secondAttribute="leading" id="Nh3-7a-zKX"/>
+                        <constraint firstAttribute="trailing" secondItem="vDp-cV-sOj" secondAttribute="trailing" constant="2" id="SRX-OM-xwe"/>
+                        <constraint firstAttribute="trailing" secondItem="zbV-Xu-baS" secondAttribute="trailing" constant="2" id="a69-pR-wwd"/>
+                        <constraint firstAttribute="centerY" secondItem="EP0-GM-YHK" secondAttribute="centerY" id="bEA-df-tSv"/>
+                        <constraint firstAttribute="centerX" secondItem="v7m-gA-cUQ" secondAttribute="centerX" id="kXe-HQ-Xmv"/>
+                        <constraint firstAttribute="centerY" secondItem="vDp-cV-sOj" secondAttribute="centerY" id="pjb-a3-XuQ"/>
+                        <constraint firstItem="v7m-gA-cUQ" firstAttribute="top" secondItem="Oj1-vC-8Hr" secondAttribute="top" constant="2" id="szO-3z-ccQ"/>
+                        <constraint firstAttribute="bottom" secondItem="3bd-qo-SXs" secondAttribute="bottom" constant="2" id="uVy-4e-XLB"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XQb-rW-aek">
+                    <rect key="frame" x="0.0" y="400" width="480" height="80"/>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="80" id="721-Kl-qPA"/>
+                    </constraints>
+                </view>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
             <constraints>
-                <constraint firstItem="kId-c2-rCX" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="bottom" multiplier="1/3" constant="1" id="5cJ-9S-tgC"/>
-                <constraint firstAttribute="centerX" secondItem="kId-c2-rCX" secondAttribute="centerX" id="Koa-jz-hwk"/>
-                <constraint firstAttribute="bottom" secondItem="8ie-xW-0ye" secondAttribute="bottom" constant="20" id="Kzo-t9-V3l"/>
-                <constraint firstItem="8ie-xW-0ye" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="MfP-vx-nX0"/>
-                <constraint firstAttribute="centerX" secondItem="8ie-xW-0ye" secondAttribute="centerX" id="ZEH-qu-HZ9"/>
-                <constraint firstItem="kId-c2-rCX" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="fvb-Df-36g"/>
+                <constraint firstAttribute="trailing" secondItem="Oj1-vC-8Hr" secondAttribute="trailing" constant="-1" id="JCa-kn-z7N"/>
+                <constraint firstAttribute="bottom" secondItem="XQb-rW-aek" secondAttribute="bottom" id="JGj-Px-O5G"/>
+                <constraint firstItem="XQb-rW-aek" firstAttribute="top" secondItem="Oj1-vC-8Hr" secondAttribute="bottom" id="KJV-to-1TY"/>
+                <constraint firstAttribute="trailing" secondItem="XQb-rW-aek" secondAttribute="trailing" id="Kjz-os-XgT"/>
+                <constraint firstItem="Oj1-vC-8Hr" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="j8j-mw-nzo"/>
+                <constraint firstItem="XQb-rW-aek" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="kXa-0O-v1e"/>
+                <constraint firstItem="Oj1-vC-8Hr" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="x6F-VT-LS2"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="548" y="455"/>
+            <point key="canvasLocation" x="381" y="426"/>
         </view>
     </objects>
+    <resources>
+        <image name="point-down" width="16" height="8"/>
+        <image name="point-left" width="8" height="16"/>
+        <image name="point-right" width="8" height="16"/>
+        <image name="point-up" width="16" height="8"/>
+        <image name="viewfinderMask" width="31" height="31"/>
+    </resources>
 </document>

@@ -14,6 +14,11 @@
 		3C99B94419CE2AB900A70C94 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C99B94319CE2AB900A70C94 /* Images.xcassets */; };
 		3C99B94719CE2AB900A70C94 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C99B94519CE2AB900A70C94 /* LaunchScreen.xib */; };
 		3C99B95319CE2AB900A70C94 /* ice_lollyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C99B95219CE2AB900A70C94 /* ice_lollyTests.m */; };
+		3C99B96119CF3ADB00A70C94 /* AAPLPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C99B96019CF3ADB00A70C94 /* AAPLPreviewView.m */; };
+		3C99B96419CF485B00A70C94 /* UILabel+Shake.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C99B96319CF485B00A70C94 /* UILabel+Shake.m */; };
+		3C99B96719CF4A3D00A70C94 /* LPCButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C99B96619CF4A3D00A70C94 /* LPCButton.m */; };
+		3C99B96A19CF4A5900A70C94 /* UIImage+Colors.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C99B96919CF4A5900A70C94 /* UIImage+Colors.m */; };
+		3CB99C1919CF915E00683BE0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB99C1819CF915E00683BE0 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +45,15 @@
 		3C99B94C19CE2AB900A70C94 /* ice lollyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ice lollyTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C99B95119CE2AB900A70C94 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3C99B95219CE2AB900A70C94 /* ice_lollyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ice_lollyTests.m; sourceTree = "<group>"; };
+		3C99B95F19CF3ADB00A70C94 /* AAPLPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAPLPreviewView.h; sourceTree = "<group>"; };
+		3C99B96019CF3ADB00A70C94 /* AAPLPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAPLPreviewView.m; sourceTree = "<group>"; };
+		3C99B96219CF485B00A70C94 /* UILabel+Shake.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+Shake.h"; sourceTree = "<group>"; };
+		3C99B96319CF485B00A70C94 /* UILabel+Shake.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+Shake.m"; sourceTree = "<group>"; };
+		3C99B96519CF4A3D00A70C94 /* LPCButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LPCButton.h; sourceTree = "<group>"; };
+		3C99B96619CF4A3D00A70C94 /* LPCButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LPCButton.m; sourceTree = "<group>"; };
+		3C99B96819CF4A5900A70C94 /* UIImage+Colors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Colors.h"; sourceTree = "<group>"; };
+		3C99B96919CF4A5900A70C94 /* UIImage+Colors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Colors.m"; sourceTree = "<group>"; };
+		3CB99C1819CF915E00683BE0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3CB99C1919CF915E00683BE0 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +78,7 @@
 		3C99B92A19CE2AB900A70C94 = {
 			isa = PBXGroup;
 			children = (
+				3CB99C1819CF915E00683BE0 /* AVFoundation.framework */,
 				3C99B93519CE2AB900A70C94 /* ice lolly */,
 				3C99B94F19CE2AB900A70C94 /* ice lollyTests */,
 				3C99B93419CE2AB900A70C94 /* Products */,
@@ -86,8 +102,9 @@
 				3C99B93D19CE2AB900A70C94 /* ViewController.h */,
 				3C99B93E19CE2AB900A70C94 /* ViewController.m */,
 				3C99B94019CE2AB900A70C94 /* Main.storyboard */,
-				3C99B94319CE2AB900A70C94 /* Images.xcassets */,
 				3C99B94519CE2AB900A70C94 /* LaunchScreen.xib */,
+				3C99B94319CE2AB900A70C94 /* Images.xcassets */,
+				3C99B96B19CF692E00A70C94 /* Parts */,
 				3C99B93619CE2AB900A70C94 /* Supporting Files */,
 			);
 			path = "ice lolly";
@@ -117,6 +134,21 @@
 				3C99B95119CE2AB900A70C94 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3C99B96B19CF692E00A70C94 /* Parts */ = {
+			isa = PBXGroup;
+			children = (
+				3C99B96219CF485B00A70C94 /* UILabel+Shake.h */,
+				3C99B96319CF485B00A70C94 /* UILabel+Shake.m */,
+				3C99B95F19CF3ADB00A70C94 /* AAPLPreviewView.h */,
+				3C99B96019CF3ADB00A70C94 /* AAPLPreviewView.m */,
+				3C99B96519CF4A3D00A70C94 /* LPCButton.h */,
+				3C99B96619CF4A3D00A70C94 /* LPCButton.m */,
+				3C99B96819CF4A5900A70C94 /* UIImage+Colors.h */,
+				3C99B96919CF4A5900A70C94 /* UIImage+Colors.m */,
+			);
+			name = Parts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -221,7 +253,11 @@
 			files = (
 				3C99B93F19CE2AB900A70C94 /* ViewController.m in Sources */,
 				3C99B93C19CE2AB900A70C94 /* AppDelegate.m in Sources */,
+				3C99B96419CF485B00A70C94 /* UILabel+Shake.m in Sources */,
+				3C99B96A19CF4A5900A70C94 /* UIImage+Colors.m in Sources */,
 				3C99B93919CE2AB900A70C94 /* main.m in Sources */,
+				3C99B96119CF3ADB00A70C94 /* AAPLPreviewView.m in Sources */,
+				3C99B96719CF4A3D00A70C94 /* LPCButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +448,7 @@
 				3C99B95819CE2AB900A70C94 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3C99B95919CE2AB900A70C94 /* Build configuration list for PBXNativeTarget "ice lollyTests" */ = {
 			isa = XCConfigurationList;
@@ -420,6 +457,7 @@
 				3C99B95B19CE2AB900A70C94 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
