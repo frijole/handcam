@@ -19,6 +19,8 @@
 		3C99B96719CF4A3D00A70C94 /* LPCButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C99B96619CF4A3D00A70C94 /* LPCButton.m */; };
 		3C99B96A19CF4A5900A70C94 /* UIImage+Colors.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C99B96919CF4A5900A70C94 /* UIImage+Colors.m */; };
 		3CB99C1919CF915E00683BE0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB99C1819CF915E00683BE0 /* AVFoundation.framework */; };
+		3CE961DB19D6DB56007CA04A /* LPCFocusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CE961DA19D6DB56007CA04A /* LPCFocusView.m */; };
+		3CE961DE19D6E4F2007CA04A /* UIView+Blur.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CE961DD19D6E4F2007CA04A /* UIView+Blur.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +56,10 @@
 		3C99B96819CF4A5900A70C94 /* UIImage+Colors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Colors.h"; sourceTree = "<group>"; };
 		3C99B96919CF4A5900A70C94 /* UIImage+Colors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Colors.m"; sourceTree = "<group>"; };
 		3CB99C1819CF915E00683BE0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		3CE961D919D6DB56007CA04A /* LPCFocusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LPCFocusView.h; sourceTree = "<group>"; };
+		3CE961DA19D6DB56007CA04A /* LPCFocusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LPCFocusView.m; sourceTree = "<group>"; };
+		3CE961DC19D6E4F2007CA04A /* UIView+Blur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Blur.h"; sourceTree = "<group>"; };
+		3CE961DD19D6E4F2007CA04A /* UIView+Blur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Blur.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,8 +84,8 @@
 		3C99B92A19CE2AB900A70C94 = {
 			isa = PBXGroup;
 			children = (
-				3CB99C1819CF915E00683BE0 /* AVFoundation.framework */,
 				3C99B93519CE2AB900A70C94 /* ice lolly */,
+				3CB99C1A19CFC79B00683BE0 /* Frameworks */,
 				3C99B94F19CE2AB900A70C94 /* ice lollyTests */,
 				3C99B93419CE2AB900A70C94 /* Products */,
 			);
@@ -147,8 +153,20 @@
 				3C99B96619CF4A3D00A70C94 /* LPCButton.m */,
 				3C99B96819CF4A5900A70C94 /* UIImage+Colors.h */,
 				3C99B96919CF4A5900A70C94 /* UIImage+Colors.m */,
+				3CE961D919D6DB56007CA04A /* LPCFocusView.h */,
+				3CE961DA19D6DB56007CA04A /* LPCFocusView.m */,
+				3CE961DC19D6E4F2007CA04A /* UIView+Blur.h */,
+				3CE961DD19D6E4F2007CA04A /* UIView+Blur.m */,
 			);
 			name = Parts;
+			sourceTree = "<group>";
+		};
+		3CB99C1A19CFC79B00683BE0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3CB99C1819CF915E00683BE0 /* AVFoundation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -200,6 +218,7 @@
 				TargetAttributes = {
 					3C99B93219CE2AB900A70C94 = {
 						CreatedOnToolsVersion = 6.0.1;
+						DevelopmentTeam = W27P2Y376L;
 					};
 					3C99B94B19CE2AB900A70C94 = {
 						CreatedOnToolsVersion = 6.0.1;
@@ -252,8 +271,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C99B93F19CE2AB900A70C94 /* ViewController.m in Sources */,
+				3CE961DE19D6E4F2007CA04A /* UIView+Blur.m in Sources */,
 				3C99B93C19CE2AB900A70C94 /* AppDelegate.m in Sources */,
 				3C99B96419CF485B00A70C94 /* UILabel+Shake.m in Sources */,
+				3CE961DB19D6DB56007CA04A /* LPCFocusView.m in Sources */,
 				3C99B96A19CF4A5900A70C94 /* UIImage+Colors.m in Sources */,
 				3C99B93919CE2AB900A70C94 /* main.m in Sources */,
 				3C99B96119CF3ADB00A70C94 /* AAPLPreviewView.m in Sources */,
@@ -379,6 +400,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "ice lolly/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -389,6 +411,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "ice lolly/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

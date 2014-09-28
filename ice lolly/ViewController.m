@@ -14,6 +14,9 @@
 #import "TargetConditionals.h"
 
 #import "UILabel+Shake.h"
+#import "LPCFocusView.h"
+
+#define NSStringFromRecognizerState(UIGestureRecognizerState) @[@"UIGestureRecognizerStatePossible", @"UIGestureRecognizerStateBegan", @"UIGestureRecognizerStateChanged", @"UIGestureRecognizerStateEnded", @"UIGestureRecognizerStateCancelled", @"UIGestureRecognizerStateFailed", @"UIGestureRecognizerStateRecognized"][UIGestureRecognizerState]
 
 // for camera
 static void *CapturingStillImageContext = &CapturingStillImageContext;
@@ -27,7 +30,7 @@ static void *ExposureDurationContext = &ExposureDurationContext;
 static void *ISOContext = &ISOContext;
 // end camera stuff
 
-@interface ViewController () <AVCaptureFileOutputRecordingDelegate>
+@interface ViewController () <AVCaptureFileOutputRecordingDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic) NSArray *isoValues;
 @property (nonatomic) NSInteger currentISO;
@@ -40,6 +43,11 @@ static void *ISOContext = &ISOContext;
 
 - (void)increaseShutterDuration;
 - (void)decreaseShutterDuration;
+
+@property (nonatomic, strong) LPCFocusView *focusView;
+@property (nonatomic) BOOL touchActive;
+@property (nonatomic) BOOL focusLocked;
+@property (nonatomic, strong) NSTimer *dismissFocusTimer;
 
 // for camera
 @property (nonatomic) dispatch_queue_t sessionQueue; // Communicate with the session and other session objects on this queue.
@@ -64,17 +72,27 @@ static void *ISOContext = &ISOContext;
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    for ( UIView *tmpContainer in @[self.isoContainer, self.shutterContainer] ) {
-        [tmpContainer.layer setCornerRadius:7.0f];
+/*
+    for ( UIView *tmpContainer in @[self.isoContainer, self.shutterContainer, self.focusLockView] ) {
+        [tmpContainer.layer setCornerRadius:5.0f];
         [tmpContainer.layer setBorderWidth:1.0f];
-        [tmpContainer.layer setBorderColor:[UIColor colorWithWhite:1.0f alpha:0.3f].CGColor];
+        [tmpContainer.layer setBorderColor:[UIColor colorWithWhite:1.0f alpha:0.5f].CGColor];
         [tmpContainer setClipsToBounds:YES];
-        
-        [tmpContainer setAlpha:0.75f];
     }
+ */
+    
+    [self.thumbnailImageView.layer setCornerRadius:4.5f];
+    [self.thumbnailImageView setClipsToBounds:YES];
+    [self.thumbnailContainer.layer setCornerRadius:5.0f];
+    [self.thumbnailContainer setClipsToBounds:YES];
+    
+    [self setSwipeRecognizers:@[self.swipeUpRecognizer, self.swipeDownRecognizer, self.swipeLeftRecognizer, self.swipeRightRecognizer]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationChanged) name:UIDeviceOrientationDidChangeNotification object:nil];
 
+    // grab iso and shutter from the prefs
+    // TODO: update iso and shutter values
+    
 #if TARGET_IPHONE_SIMULATOR
     return;
 #endif
@@ -82,9 +100,14 @@ static void *ISOContext = &ISOContext;
     [self setupCamera];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+#if TARGET_IPHONE_SIMULATOR
+    return;
+#endif
+
+    [self.previewView setAlpha:0.0f];
     
     dispatch_async([self sessionQueue], ^{
         [self addObservers];
@@ -93,11 +116,21 @@ static void *ISOContext = &ISOContext;
     });
 }
 
-- (void)viewDidDisappear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
+    
+    [UIView animateWithDuration:0.2f
+                          delay:0.5f
+                        options:0
+                     animations:^{
+                         [self.previewView setAlpha:1.0f];
+                     } completion:nil];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
     dispatch_async([self sessionQueue], ^{
         [[self session] stopRunning];
-        
         [self removeObservers];
     });
     
@@ -111,6 +144,124 @@ static void *ISOContext = &ISOContext;
 
 - (BOOL)prefersStatusBarHidden {
     return YES;
+}
+
+- (void)applicationDidEnterBackground:(id)notification {
+    NSLog(@"viewController applicationDidEnterBackground");
+    [self.previewView setAlpha:0.0f];
+}
+
+- (void)applicationWillEnterForeground:(id)notification {
+    NSLog(@"viewController applicationWillEnterForeground");
+    [self.previewView setAlpha:1.0f];
+}
+
+#pragma mark - Touches
+- (void)longPressGestureRecognizerFired:(UILongPressGestureRecognizer *)longPressRecognizer {
+    // NSLog(@"long press recognizer fired, state: %@", NSStringFromRecognizerState(longPressRecognizer.state));
+    CGPoint touchLocation = [longPressRecognizer locationInView:self.previewView];
+    if ( longPressRecognizer.state == UIGestureRecognizerStateBegan ) {
+        [self setTouchActive:YES];
+        [self setFocusLocked:YES];
+        [self moveOrAddFocusViewAtPoint:touchLocation dismiss:NO];
+    }
+    else if ( longPressRecognizer.state == UIGestureRecognizerStateChanged ) {
+        [self moveOrAddFocusViewAtPoint:touchLocation dismiss:NO];
+    }
+    else if ( longPressRecognizer.state == UIGestureRecognizerStateEnded ) {
+        [self setTouchActive:NO];
+        [self moveOrAddFocusViewAtPoint:touchLocation dismiss:YES];
+    }
+}
+
+- (void)tapGestureRecognizerFired:(UITapGestureRecognizer *)tapRecognizer {
+    // NSLog(@"tap recognizer fired, state: %@", NSStringFromRecognizerState(tapRecognizer.state));
+    if ( tapRecognizer.state == UIGestureRecognizerStateRecognized ) {
+        if ( self.focusLocked ) {
+            [self setAutoFocusEnabled:YES]; // to restart AF
+            [self setFocusLocked:NO];
+            [self dismissFocusViewWithDelay:NO];
+        } /* else {
+            [self moveOrAddFocusViewAtPoint:[tapRecognizer locationInView:self.previewView] dismiss:YES];
+        } */
+    }
+}
+
+- (void)moveOrAddFocusViewAtPoint:(CGPoint)point dismiss:(BOOL)dismiss {
+#if TARGET_IPHONE_SIMULATOR
+#else
+    // try to focus on the point
+    CGPoint devicePoint = [(AVCaptureVideoPreviewLayer *)[[self previewView] layer] captureDevicePointOfInterestForPoint:point];
+    [self focusWithMode:self.focusLocked?AVCaptureFocusModeAutoFocus:AVCaptureFocusModeContinuousAutoFocus exposeWithMode:self.videoDevice.exposureMode atDevicePoint:devicePoint monitorSubjectAreaChange:YES];
+#endif
+    
+    // stop any timer to dismiss
+    [self.dismissFocusTimer invalidate];
+    
+    // handle the UI bits
+    if ( !self.focusView ) {
+        // create it and add it
+        LPCFocusView *tmpFocusView = [[LPCFocusView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 100.0f, 100.0f)];
+        [tmpFocusView setCenter:point];
+        [tmpFocusView setTransform:CGAffineTransformMakeScale(1.5f, 1.5f)];
+        [self.viewfinderFrame setClipsToBounds:YES];
+        [self.viewfinderFrame addSubview:tmpFocusView];
+        [self setFocusView:tmpFocusView];
+    }
+    
+    CGFloat tmpPreviewHeight = CGRectGetHeight(self.previewView.frame);
+    tmpPreviewHeight-=1.0f;
+    if ( point.y < 1.0f ) {
+        point.y = 1.0f;
+    } else if ( point.y > tmpPreviewHeight ) {
+        point.y = tmpPreviewHeight;
+    }
+    
+    if ( self.touchActive ) {
+        [UIView animateWithDuration:0.05f delay:0.0f options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            [self.focusView setCenter:point];
+            [self.focusView setAlpha:1.0f];
+            [self.focusView setTransform:CGAffineTransformIdentity];
+//            [self.focusLockView setAlpha:self.focusLocked?0.75f:0.0f];
+        } completion:nil];
+    }
+    else {
+        [UIView animateWithDuration:0.05f delay:0.0f options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            [self.focusView setCenter:point];
+            [self.focusView setAlpha:1.0f];
+            [self.focusView setTransform:CGAffineTransformIdentity];
+//            [self.focusLockView setAlpha:self.focusLocked?0.75f:0.0f];
+        } completion:^(BOOL finished) {
+            if ( finished && dismiss ) {
+                [self dismissFocusViewWithDelay:YES];
+            }
+        }];
+    }
+}
+
+- (void)dismissFocusViewWithDelay:(BOOL)shouldDelay {
+    
+    [self.dismissFocusTimer invalidate];
+    
+    if ( shouldDelay ) {
+        self.dismissFocusTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(dismissFocusViewWithDelay:) userInfo:nil repeats:NO];
+        return;
+    }
+    
+    UIView *tmpFocusView = self.focusView;
+    [self setFocusView:nil];
+
+    CGAffineTransform tmpSmallerTransform = CGAffineTransformMakeScale(0.8f, 0.8f);
+    [UIView animateWithDuration:0.25f
+                     animations:^{
+                         [tmpFocusView setAlpha:0.0f];
+                         [tmpFocusView setTransform:tmpSmallerTransform];
+//                         [self.focusLockView setAlpha:self.focusLocked?0.75f:0.0f];
+                     } completion:^(BOOL finished) {
+                         if ( finished ) {
+                             [tmpFocusView removeFromSuperview];
+                         }
+                     }];
 }
 
 - (IBAction)swipeUp:(id)sender {
@@ -185,41 +336,85 @@ static void *ISOContext = &ISOContext;
     }
 }
 
-- (void)deviceOrientationChanged
-{
+- (void)deviceOrientationChanged {
     UIDeviceOrientation toDeviceOrientation = [[UIDevice currentDevice] orientation];
     
     CGFloat tmpRotation = 0.0f;
+    BOOL tmpCancelRotation = NO;
+    CGAffineTransform tmpFocusContainerTransform = CGAffineTransformIdentity;
+    CGAffineTransform tmpFocusIconTransform = CGAffineTransformIdentity;
+    
     switch ( toDeviceOrientation ) {
         case UIDeviceOrientationLandscapeLeft:
             tmpRotation = M_PI_2;
+            // tmpAFLockOffset = -17.0f;
             break;
         case UIDeviceOrientationLandscapeRight:
             tmpRotation = -M_PI_2;
+            tmpFocusContainerTransform = CGAffineTransformMakeScale(-1.0f, 1.0f);
+            tmpFocusIconTransform = CGAffineTransformMakeRotation(M_PI_2);
+            // tmpAFLockOffset = 17.0f;
             break;
         case UIDeviceOrientationPortraitUpsideDown:
             tmpRotation = M_PI;
+            tmpFocusContainerTransform = CGAffineTransformMakeScale(-1.0f, 1.0f);
+            tmpFocusIconTransform = CGAffineTransformMakeRotation(-M_PI);
             break;
-        default:
+        case UIDeviceOrientationPortrait:
             tmpRotation = 0.0f;
             break;
+        case UIDeviceOrientationFaceUp:
+            tmpCancelRotation = YES;
+            break;
+        case UIDeviceOrientationFaceDown:
+            tmpCancelRotation = YES;
+            break;
+        case UIDeviceOrientationUnknown:
+            tmpCancelRotation = YES;
+            break;
     }
-    
+
+    if ( tmpCancelRotation ) {
+        return;
+    }
+
+    CGAffineTransform tmpTransform = CGAffineTransformMakeRotation(tmpRotation);
+    if ( CGAffineTransformIsIdentity(tmpFocusIconTransform) ) {
+        tmpFocusIconTransform = tmpTransform;
+    }
     [UIView animateWithDuration:0.2f
                      animations:^{
-                         CGAffineTransform tmpTransform = CGAffineTransformMakeRotation(tmpRotation);
                          [self.isoContainer setTransform:tmpTransform];
                          [self.shutterContainer setTransform:tmpTransform];
+                         // tmpTransform = CGAffineTransformTranslate(tmpTransform, tmpAFLockOffset, 0.0f);
+                         [self.focusLockView setTransform:tmpTransform];
+                         [self.thumbnailContainer setTransform:tmpTransform];
+
+                         [self.focusContainer setTransform:tmpFocusContainerTransform];
+                         [self.macroIcon setTransform:tmpFocusIconTransform];
+                         [self.distanceIcon setTransform:tmpFocusIconTransform];
                      }];
 }
 
 #pragma mark - Overrides
+- (void)setFocusLocked:(BOOL)focusLocked
+{
+    if ( _focusLocked != focusLocked ) {
+        [UIView transitionWithView:self.lockIcon
+                          duration:0.2f
+                           options:focusLocked?UIViewAnimationOptionTransitionFlipFromLeft:UIViewAnimationOptionTransitionFlipFromRight
+                        animations:^{
+                            [self.lockIcon setImage:[UIImage imageNamed:focusLocked?@"lockIcon":@"unlockedIcon"]];
+                        } completion:nil];
+    }
+    _focusLocked = focusLocked;
+}
+
 - (NSArray *)isoValues {
     return _isoValues?:@[@"50", @"100", @"200", @"400", @"800", @"1600"];
 }
 
-- (void)setCurrentISO:(NSInteger)newISO
-{
+- (void)setCurrentISO:(NSInteger)newISO {
     NSError *error = nil;
 
     if ( [self.isoValues indexOfObject:[NSString stringWithFormat:@"%@", @(newISO)]] == NSNotFound ) {
@@ -237,6 +432,7 @@ static void *ISOContext = &ISOContext;
         NSLog(@"%@", error);
     } else {
         _currentISO = newISO;
+        // TODO: save to prefs
     }
 }
 
@@ -256,8 +452,7 @@ static void *ISOContext = &ISOContext;
     return _shutterLabelValues?:@[@"1", @"2", @"4", @"8", @"15", @"30", @"60", @"125", @"250", @"500", @"1000"];
 }
 
-- (void)setCurrentShutterDuration:(NSInteger)newShutterDuration
-{
+- (void)setCurrentShutterDuration:(NSInteger)newShutterDuration {
     NSError *error = nil;
     
     if ( [self.shutterLabelValues indexOfObject:[NSString stringWithFormat:@"%@", @(newShutterDuration)]] == NSNotFound ) {
@@ -276,6 +471,7 @@ static void *ISOContext = &ISOContext;
     }
     else {
         _currentShutterDuration = newShutterDuration;
+        // TODO: save to prefs
     }
 }
 
@@ -290,6 +486,15 @@ static void *ISOContext = &ISOContext;
     }
     [self setShutterLabelValues:[NSArray arrayWithArray:tmpShutterLabelsCopy]];
     // TODO: update label
+}
+
+- (void)setTouchActive:(BOOL)touchActive
+{
+    _touchActive = touchActive;
+    
+    for ( UISwipeGestureRecognizer *tmpSwipeRecognizer in self.swipeRecognizers ) {
+        [tmpSwipeRecognizer setEnabled:!touchActive];
+    }
 }
 
 #pragma mark - Adjustments
@@ -351,7 +556,7 @@ static void *ISOContext = &ISOContext;
 
 - (void)increaseShutterDuration {
     if ( [self.shutterLabel.text isEqualToString:self.shutterLabelValues.firstObject] ) {
-        [self.shutterLabel shakeLeft];
+        [self.shutterLabel shakeRight];
         return;
     }
 
@@ -379,7 +584,7 @@ static void *ISOContext = &ISOContext;
 
 - (void)decreaseShutterDuration {
     if ( [self.shutterLabel.text isEqualToString:self.shutterLabelValues.lastObject] ) {
-        [self.shutterLabel shakeRight];
+        [self.shutterLabel shakeLeft];
         return;
     }
     
@@ -438,6 +643,8 @@ static void *ISOContext = &ISOContext;
         
         [[self session] beginConfiguration];
         
+        [[self session] setSessionPreset:AVCaptureSessionPresetPhoto];
+        
         if ([session canAddInput:videoDeviceInput]) {
             [session addInput:videoDeviceInput];
             [self setVideoDeviceInput:videoDeviceInput];
@@ -454,31 +661,35 @@ static void *ISOContext = &ISOContext;
             });
         }
         
-        AVCaptureDevice *audioDevice = [[AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio] firstObject];
-        AVCaptureDeviceInput *audioDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:audioDevice error:&error];
+//        AVCaptureDevice *audioDevice = [[AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio] firstObject];
+//        AVCaptureDeviceInput *audioDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:audioDevice error:&error];
+//        
+//        if (error) {
+//            NSLog(@"%@", error);
+//        }
+//        
+//        if ([session canAddInput:audioDeviceInput]) {
+//            [session addInput:audioDeviceInput];
+//        }
         
-        if (error) {
-            NSLog(@"%@", error);
-        }
-        
-        if ([session canAddInput:audioDeviceInput]) {
-            [session addInput:audioDeviceInput];
-        }
-        
-        AVCaptureMovieFileOutput *movieFileOutput = [[AVCaptureMovieFileOutput alloc] init];
-        if ([session canAddOutput:movieFileOutput]) {
-            [session addOutput:movieFileOutput];
-            AVCaptureConnection *connection = [movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
-            if ([connection isVideoStabilizationSupported]) {
-                // TODO: UPDATE (?)
-                [connection setEnablesVideoStabilizationWhenAvailable:YES];
-            }
-            [self setMovieFileOutput:movieFileOutput];
-        }
+//        AVCaptureMovieFileOutput *movieFileOutput = [[AVCaptureMovieFileOutput alloc] init];
+//        if ([session canAddOutput:movieFileOutput]) {
+//            [session addOutput:movieFileOutput];
+//            AVCaptureConnection *connection = [movieFileOutput connectionWithMediaType:AVMediaTypeVideo];
+//            if ([connection isVideoStabilizationSupported]) {
+//                // TODO: UPDATE (?)
+//                [connection setEnablesVideoStabilizationWhenAvailable:YES];
+//            }
+//            [self setMovieFileOutput:movieFileOutput];
+//        }
         
         AVCaptureStillImageOutput *stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
         if ([session canAddOutput:stillImageOutput]) {
             [stillImageOutput setOutputSettings:@{AVVideoCodecKey : AVVideoCodecJPEG}];
+            [stillImageOutput setHighResolutionStillImageOutputEnabled:YES];
+            if ( [stillImageOutput isStillImageStabilizationSupported] ) {
+                [stillImageOutput setAutomaticallyEnablesStillImageStabilizationWhenAvailable:YES];
+            }
             [session addOutput:stillImageOutput];
             [self setStillImageOutput:stillImageOutput];
         }
@@ -534,21 +745,56 @@ static void *ISOContext = &ISOContext;
     }];
 }
 
-#pragma mark - Transplanted Camera Methods
-- (void)addObservers
+- (IBAction)shutterButtonPressed:(id)sender
 {
+    [self snapStillImage:nil];
+
+    AudioServicesPlaySystemSound(1108);
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[[self previewView] layer] setOpacity:0.0];
+        [UIView animateWithDuration:.25 animations:^{
+            [[[self previewView] layer] setOpacity:1.0];
+        }];
+    });
+}
+
+- (void)snapStillImage:(id)sender
+{
+    dispatch_async([self sessionQueue], ^{
+        // Update the orientation on the still image output video connection before capturing.
+        [[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:[[(AVCaptureVideoPreviewLayer *)[[self previewView] layer] connection] videoOrientation]];
+        
+        // Capture a still image
+        [[self stillImageOutput] captureStillImageAsynchronouslyFromConnection:[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
+            
+            if (imageDataSampleBuffer)
+            {
+                NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
+                UIImage *image = [[UIImage alloc] initWithData:imageData];
+                [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] orientation:(ALAssetOrientation)[image imageOrientation] completionBlock:nil];
+            }
+        }];
+    });
+}
+
+#pragma mark - Transplanted Camera Methods
+- (void)addObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationChanged) name:UIDeviceOrientationDidChangeNotification object:nil];
     
-    [self addObserver:self forKeyPath:@"sessionRunningAndDeviceAuthorized" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:SessionRunningAndDeviceAuthorizedContext];
-    [self addObserver:self forKeyPath:@"stillImageOutput.capturingStillImage" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:CapturingStillImageContext];
-    [self addObserver:self forKeyPath:@"movieFileOutput.recording" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:RecordingContext];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
     
-    [self addObserver:self forKeyPath:@"videoDeviceInput.device.focusMode" options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:FocusModeContext];
-    [self addObserver:self forKeyPath:@"videoDeviceInput.device.lensPosition" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:LensPositionContext];
-    
-    [self addObserver:self forKeyPath:@"videoDeviceInput.device.exposureMode" options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:ExposureModeContext];
-    [self addObserver:self forKeyPath:@"videoDeviceInput.device.exposureDuration" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:ExposureDurationContext];
-    [self addObserver:self forKeyPath:@"videoDeviceInput.device.ISO" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:ISOContext];
+//    [self addObserver:self forKeyPath:@"sessionRunningAndDeviceAuthorized" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:SessionRunningAndDeviceAuthorizedContext];
+//    [self addObserver:self forKeyPath:@"stillImageOutput.capturingStillImage" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:CapturingStillImageContext];
+//    [self addObserver:self forKeyPath:@"movieFileOutput.recording" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:RecordingContext];
+//    
+//    [self addObserver:self forKeyPath:@"videoDeviceInput.device.focusMode" options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:FocusModeContext];
+//    [self addObserver:self forKeyPath:@"videoDeviceInput.device.lensPosition" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:LensPositionContext];
+//    
+//    [self addObserver:self forKeyPath:@"videoDeviceInput.device.exposureMode" options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:ExposureModeContext];
+//    [self addObserver:self forKeyPath:@"videoDeviceInput.device.exposureDuration" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:ExposureDurationContext];
+//    [self addObserver:self forKeyPath:@"videoDeviceInput.device.ISO" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:ISOContext];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(subjectAreaDidChange:) name:AVCaptureDeviceSubjectAreaDidChangeNotification object:[self videoDevice]];
     
@@ -563,8 +809,7 @@ static void *ISOContext = &ISOContext;
     }]];
 }
 
-- (void)removeObservers
-{
+- (void)removeObservers {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVCaptureDeviceSubjectAreaDidChangeNotification object:[self videoDevice]];
     [[NSNotificationCenter defaultCenter] removeObserver:[self runtimeErrorHandlingObserver]];
@@ -581,72 +826,14 @@ static void *ISOContext = &ISOContext;
     [self removeObserver:self forKeyPath:@"videoDevice.ISO" context:ISOContext];
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-#ifdef TARGET_IPHONE_SIMULATOR
-    return;
-#endif
-    
-    if (context == FocusModeContext) {
-        AVCaptureFocusMode oldMode = [change[NSKeyValueChangeOldKey] intValue];
-        AVCaptureFocusMode newMode = [change[NSKeyValueChangeNewKey] intValue];
-        NSLog(@"FOCUS MODE: %@ -> %@", [self stringFromFocusMode:oldMode], [self stringFromFocusMode:newMode]);
-        // [self updateSliderConfiguration];
-    }
-    else if (context == LensPositionContext) {
-        float newLensPosition = [change[NSKeyValueChangeNewKey] floatValue];
-        NSLog(@"LENS POSITION: %@", @(newLensPosition));
-        // self.slider.value = newLensPosition;
-    }
-    else if (context == ExposureModeContext) {
-        AVCaptureExposureMode oldMode = [change[NSKeyValueChangeOldKey] intValue];
-        AVCaptureExposureMode newMode = [change[NSKeyValueChangeNewKey] intValue];
-        NSLog(@"EXPOSURE MODE: %@ -> %@", [self stringFromExposureMode:oldMode], [self stringFromExposureMode:newMode]);
-        // [self.exposureControl setHidden:(newMode==AVCaptureExposureModeContinuousAutoExposure||newMode==AVCaptureExposureModeAutoExpose)];
-        // [self.isoControl setHidden:(newMode==AVCaptureExposureModeContinuousAutoExposure||newMode==AVCaptureExposureModeAutoExpose)];
-        // [self updateSliderConfiguration];
-    }
-    else if (context == ExposureDurationContext) {
-        double newDurationSeconds = CMTimeGetSeconds([change[NSKeyValueChangeNewKey] CMTimeValue]);
-        NSLog(@"EXPOSURE DURATION: %@", @(newDurationSeconds));
-    }
-    else if (context == ISOContext) {
-        float newISO = [change[NSKeyValueChangeNewKey] floatValue];
-        NSLog(@"ISO: %@", @(newISO));
-    }
-    else if (context == CapturingStillImageContext) {
-        BOOL isCapturingStillImage = [change[NSKeyValueChangeNewKey] boolValue];
-        NSLog(@"CAPTURING STILL IMAGE: %@", isCapturingStillImage?@"YES":@"NO");
-        /*
-        if (isCapturingStillImage) {
-            [self runStillImageCaptureAnimation];
-        }
-        */
-    }
-    else if (context == RecordingContext) {
-        BOOL isRecording = [change[NSKeyValueChangeNewKey] boolValue];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"RECORDING: %@", isRecording?@"YES":@"NO");
-        });
-    }
-    else if (context == SessionRunningAndDeviceAuthorizedContext) {
-        BOOL isRunning = [change[NSKeyValueChangeNewKey] boolValue];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"RUNNING/AUTHORIZED: %@", isRunning?@"YES":@"NO");
-        });
-    }
-    else {
-        // [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-    }
-}
-
-- (void)subjectAreaDidChange:(NSNotification *)notification
-{
-    CGPoint devicePoint = CGPointMake(.5, .5);
+- (void)subjectAreaDidChange:(NSNotification *)notification {
     if ( !self.videoDevice.focusMode == AVCaptureFocusModeLocked ) {
-        [self focusWithMode:self.videoDevice.focusMode exposeWithMode:AVCaptureExposureModeCustom atDevicePoint:devicePoint monitorSubjectAreaChange:NO];
+        CGPoint tmpCenter = CGPointMake(CGRectGetMidX(self.previewView.bounds), CGRectGetMidY(self.previewView.bounds));
+        [self moveOrAddFocusViewAtPoint:tmpCenter dismiss:YES];
+        // CGPoint devicePoint = CGPointMake(.5, .5);
+        // [self focusWithMode:self.videoDevice.focusMode exposeWithMode:AVCaptureExposureModeCustom atDevicePoint:devicePoint monitorSubjectAreaChange:NO];
     }
 }
-
 
 - (void)setAutoFocusEnabled:(BOOL)afEnabled {
     AVCaptureFocusMode mode = afEnabled?AVCaptureFocusModeContinuousAutoFocus:AVCaptureFocusModeLocked;
@@ -655,6 +842,7 @@ static void *ISOContext = &ISOContext;
     if ([self.videoDevice lockForConfiguration:&error]) {
         if ([self.videoDevice isFocusModeSupported:mode]) {
             self.videoDevice.focusMode = mode;
+            self.focusLocked = afEnabled;
         }
         else {
             NSLog(@"Focus mode %@ is not supported. Focus mode is %@.", [self stringFromFocusMode:mode], [self stringFromFocusMode:self.videoDevice.focusMode]);
@@ -818,6 +1006,5 @@ static void *ISOContext = &ISOContext;
         }
     }];
 }
-
 
 @end
