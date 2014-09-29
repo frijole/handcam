@@ -24,7 +24,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uOT-Nf-ScK">
                                         <rect key="frame" x="200" y="0.0" width="201" height="46"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qt8-GU-s4I">
+                                            <view alpha="0.75" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qt8-GU-s4I">
                                                 <rect key="frame" x="63" y="8" width="75" height="30"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AF" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tRA-Sm-U7b">
@@ -65,7 +65,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="krK-AC-OcJ">
                                         <rect key="frame" x="400" y="0.0" width="200" height="46"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bHg-mq-yju">
+                                            <view alpha="0.75" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bHg-mq-yju">
                                                 <rect key="frame" x="115" y="7" width="75" height="30"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="250" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cER-Nv-gdC">
@@ -103,7 +103,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JSS-GL-Pfo">
                                         <rect key="frame" x="0.0" y="0.0" width="200" height="46"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fDW-5N-9jW">
+                                            <view alpha="0.75" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fDW-5N-9jW">
                                                 <rect key="frame" x="9" y="7" width="75" height="30"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nMf-Ak-bhi">
@@ -369,33 +369,46 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hmu-8h-QIK">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="46"/>
                                         <subviews>
-                                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="macroIcon" translatesAutoresizingMaskIntoConstraints="NO" id="5tX-Mm-IAy">
-                                                <rect key="frame" x="14" y="8" width="28" height="30"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="28" id="y5B-KB-IWC"/>
-                                                </constraints>
-                                            </imageView>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="sgy-bm-8UE">
-                                                <rect key="frame" x="50" y="8" width="499" height="31"/>
+                                            <slider opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="sgy-bm-8UE">
+                                                <rect key="frame" x="48" y="8" width="504" height="31"/>
                                                 <color key="minimumTrackTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 <color key="maximumTrackTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                <connections>
+                                                    <action selector="focusSliderDidChange:" destination="vXZ-lx-hvc" eventType="valueChanged" id="83T-Nw-YVQ"/>
+                                                </connections>
                                             </slider>
-                                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="distantIcon" translatesAutoresizingMaskIntoConstraints="NO" id="NcF-Hr-Fdz">
-                                                <rect key="frame" x="557" y="8" width="28" height="30"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="28" id="j8M-gT-cIj"/>
-                                                </constraints>
-                                            </imageView>
+                                            <button opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CIf-qW-XGK">
+                                                <rect key="frame" x="10" y="8" width="30" height="30"/>
+                                                <gestureRecognizers/>
+                                                <state key="normal" image="macroIcon">
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="macroButtonTapped:" destination="vXZ-lx-hvc" eventType="touchDown" id="ERp-Dm-Jiz"/>
+                                                    <outletCollection property="gestureRecognizers" destination="936-8I-o4O" appends="YES" id="lIX-hx-GmI"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uFn-Sw-dcR">
+                                                <rect key="frame" x="560" y="8" width="30" height="30"/>
+                                                <gestureRecognizers/>
+                                                <state key="normal" image="distantIcon">
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="distanceButtonTapped:" destination="vXZ-lx-hvc" eventType="touchDown" id="cNn-wl-ibV"/>
+                                                    <outletCollection property="gestureRecognizers" destination="NvN-fg-jeQ" appends="YES" id="ibB-Q4-JR6"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="sgy-bm-8UE" firstAttribute="centerY" secondItem="NcF-Hr-Fdz" secondAttribute="centerY" id="Atw-pN-x0i"/>
-                                            <constraint firstItem="5tX-Mm-IAy" firstAttribute="leading" secondItem="hmu-8h-QIK" secondAttribute="leading" constant="14" id="IK9-3m-3Ie"/>
+                                            <constraint firstAttribute="trailing" secondItem="uFn-Sw-dcR" secondAttribute="trailing" constant="10" id="2RB-44-E2h"/>
+                                            <constraint firstItem="CIf-qW-XGK" firstAttribute="leading" secondItem="hmu-8h-QIK" secondAttribute="leading" constant="10" id="83a-Qr-O0l"/>
                                             <constraint firstAttribute="centerY" secondItem="sgy-bm-8UE" secondAttribute="centerY" id="KIH-zj-7Bt"/>
-                                            <constraint firstItem="NcF-Hr-Fdz" firstAttribute="leading" secondItem="sgy-bm-8UE" secondAttribute="trailing" constant="10" id="KuE-Y3-UP1"/>
-                                            <constraint firstItem="sgy-bm-8UE" firstAttribute="leading" secondItem="5tX-Mm-IAy" secondAttribute="trailing" constant="10" id="MFD-vb-U5a"/>
-                                            <constraint firstItem="sgy-bm-8UE" firstAttribute="centerY" secondItem="5tX-Mm-IAy" secondAttribute="centerY" id="NoS-0h-LDb"/>
-                                            <constraint firstAttribute="trailing" secondItem="NcF-Hr-Fdz" secondAttribute="trailing" constant="15" id="yf2-Mv-jey"/>
+                                            <constraint firstAttribute="centerY" secondItem="CIf-qW-XGK" secondAttribute="centerY" id="ezM-uc-Inq"/>
+                                            <constraint firstItem="sgy-bm-8UE" firstAttribute="leading" secondItem="CIf-qW-XGK" secondAttribute="trailing" constant="10" id="f5V-4P-haM"/>
+                                            <constraint firstAttribute="centerY" secondItem="uFn-Sw-dcR" secondAttribute="centerY" id="oFF-qb-Ifb"/>
+                                            <constraint firstItem="uFn-Sw-dcR" firstAttribute="leading" secondItem="sgy-bm-8UE" secondAttribute="trailing" constant="10" id="rZA-m5-gjK"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KRm-ll-G5f">
@@ -486,7 +499,6 @@
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="bottomPoint" destination="Qtr-E2-v66" id="9qM-aB-WQ8"/>
-                        <outlet property="distanceIcon" destination="NcF-Hr-Fdz" id="3r3-Cm-J6H"/>
                         <outlet property="focusContainer" destination="hmu-8h-QIK" id="nUW-tb-ahP"/>
                         <outlet property="focusLockView" destination="Qt8-GU-s4I" id="E7O-KI-Dwe"/>
                         <outlet property="focusSlider" destination="sgy-bm-8UE" id="oi5-1U-hQd"/>
@@ -496,7 +508,6 @@
                         <outlet property="leftPoint" destination="Sxq-kJ-dbJ" id="Ql1-27-3Ef"/>
                         <outlet property="lockIcon" destination="0f8-Ub-I2c" id="ipg-M0-AQO"/>
                         <outlet property="longPressRecognizer" destination="Ded-MT-w94" id="kYg-Ff-RuQ"/>
-                        <outlet property="macroIcon" destination="5tX-Mm-IAy" id="lbE-Je-Gps"/>
                         <outlet property="previewView" destination="NtF-7Z-G5O" id="hS1-jc-A9a"/>
                         <outlet property="rightPoint" destination="09c-Id-0jz" id="tc8-bP-ORf"/>
                         <outlet property="shutterButton" destination="SLe-yf-xl9" id="ZiA-QT-fTK"/>
@@ -545,6 +556,16 @@
                     <connections>
                         <action selector="longPressGestureRecognizerFired:" destination="vXZ-lx-hvc" id="Mxr-Ed-tiO"/>
                         <outlet property="delegate" destination="vXZ-lx-hvc" id="ol8-Pt-c80"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="936-8I-o4O">
+                    <connections>
+                        <action selector="macroButtonHeld:" destination="vXZ-lx-hvc" id="1Fd-fn-RHE"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="NvN-fg-jeQ">
+                    <connections>
+                        <action selector="distanceButtonHeld:" destination="vXZ-lx-hvc" id="XiR-IT-TBf"/>
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>

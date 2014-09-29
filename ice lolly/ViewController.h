@@ -38,9 +38,18 @@
 @property (nonatomic, weak) IBOutlet UIImageView *rightPoint;
 @property (nonatomic, weak) IBOutlet UIImageView *bottomPoint;
 
-@property (nonatomic, weak) IBOutlet UIImageView *macroIcon;
 @property (nonatomic, weak) IBOutlet UISlider *focusSlider;
-@property (nonatomic, weak) IBOutlet UIImageView *distanceIcon;
+- (IBAction)focusSliderDidChange:(id)sender;
+
+@property (nonatomic, weak) IBOutlet UIButton *macroButton;
+@property (nonatomic, strong) NSTimer *macroTimer;
+- (IBAction)macroButtonTapped:(id)sender;
+- (IBAction)macroButtonHeld:(id)sender;
+
+@property (nonatomic, weak) IBOutlet UIButton *distanceButton;
+@property (nonatomic, strong) NSTimer *distanceTimer;
+- (IBAction)distanceButtonTapped:(id)sender;
+- (IBAction)distanceButtonHeld:(id)sender;
 
 @property (nonatomic, weak) IBOutlet UIView *thumbnailContainer;
 @property (nonatomic, weak) IBOutlet UIImageView *thumbnailImageView;

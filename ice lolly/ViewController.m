@@ -391,8 +391,8 @@ static void *ISOContext = &ISOContext;
                          [self.thumbnailContainer setTransform:tmpTransform];
 
                          [self.focusContainer setTransform:tmpFocusContainerTransform];
-                         [self.macroIcon setTransform:tmpFocusIconTransform];
-                         [self.distanceIcon setTransform:tmpFocusIconTransform];
+                         [self.macroButton setTransform:tmpFocusIconTransform];
+                         [self.distanceButton setTransform:tmpFocusIconTransform];
                      }];
 }
 
@@ -400,12 +400,18 @@ static void *ISOContext = &ISOContext;
 - (void)setFocusLocked:(BOOL)focusLocked
 {
     if ( _focusLocked != focusLocked ) {
+        [UIView animateWithDuration:0.2f
+                         animations:^{
+                             self.focusSlider.alpha = self.focusLocked?0.75f:1.0f;
+                         }];
+        
         [UIView transitionWithView:self.lockIcon
                           duration:0.2f
                            options:focusLocked?UIViewAnimationOptionTransitionFlipFromLeft:UIViewAnimationOptionTransitionFlipFromRight
                         animations:^{
                             [self.lockIcon setImage:[UIImage imageNamed:focusLocked?@"lockIcon":@"unlockedIcon"]];
-                        } completion:nil];
+                        }
+                        completion:nil];
     }
     _focusLocked = focusLocked;
 }
@@ -610,6 +616,75 @@ static void *ISOContext = &ISOContext;
                     completion:nil];
 }
 
+- (void)focusSliderDidChange:(id)sender
+{
+    NSError *error = nil;
+    
+    if ( [self.videoDevice lockForConfiguration:&error])
+    {
+        [self.videoDevice setFocusModeLockedWithLensPosition:self.focusSlider.value completionHandler:nil];
+        [self.videoDevice unlockForConfiguration];
+        [self setFocusLocked:YES];
+    }
+    else
+    {
+        NSLog(@"%@", error);
+    }
+}
+
+- (IBAction)macroButtonTapped:(id)sender
+{
+    [self setFocusLocked:YES];
+    
+    CGFloat tmpDecrement = 0.005f;
+    [self.focusSlider setValue:self.focusSlider.value-tmpDecrement animated:YES];
+    [self focusSliderDidChange:self.focusSlider];
+}
+
+- (IBAction)macroButtonHeld:(UILongPressGestureRecognizer *)sender
+{
+    // NSLog(@"macroButtonHeld state: %ld", sender.state);
+    if ( sender.state == UIGestureRecognizerStateBegan ) {
+        // NSLog(@"macroButtonHeld began");
+        [self.macroTimer invalidate];
+        [self setMacroTimer:[NSTimer scheduledTimerWithTimeInterval:0.05f
+                                                             target:self
+                                                           selector:@selector(macroButtonTapped:)
+                                                           userInfo:nil
+                                                            repeats:YES]];
+    }
+    else if ( sender.state == UIGestureRecognizerStateEnded ) {
+        // NSLog(@"macroButtonHeld ended");
+        [self.macroTimer invalidate];
+    }
+}
+
+- (IBAction)distanceButtonTapped:(id)sender
+{
+    [self setFocusLocked:YES];
+    CGFloat tmpIncrement = 0.005f;
+    [self.focusSlider setValue:self.focusSlider.value+tmpIncrement];
+    [self focusSliderDidChange:self.focusSlider];
+}
+
+- (IBAction)distanceButtonHeld:(UILongPressGestureRecognizer *)sender
+{
+    // NSLog(@"distanceButtonHeld");
+    if ( sender.state == UIGestureRecognizerStateBegan ) {
+        // NSLog(@"distanceButtonHeld began");
+        [self.distanceTimer invalidate];
+        [self setDistanceTimer:[NSTimer scheduledTimerWithTimeInterval:0.05f
+                                                                target:self
+                                                              selector:@selector(distanceButtonTapped:)
+                                                              userInfo:nil
+                                                               repeats:YES]];
+    }
+    else if ( sender.state == UIGestureRecognizerStateEnded ) {
+        // NSLog(@"distanceButtonHeld ended");
+        [self.distanceTimer invalidate];
+    }
+}
+
 #pragma mark - Camera
 - (void)setupCamera {
     // Create the AVCaptureSession
@@ -790,8 +865,8 @@ static void *ISOContext = &ISOContext;
 //    [self addObserver:self forKeyPath:@"movieFileOutput.recording" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:RecordingContext];
 //    
 //    [self addObserver:self forKeyPath:@"videoDeviceInput.device.focusMode" options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:FocusModeContext];
-//    [self addObserver:self forKeyPath:@"videoDeviceInput.device.lensPosition" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:LensPositionContext];
-//    
+    [self addObserver:self forKeyPath:@"videoDeviceInput.device.lensPosition" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:LensPositionContext];
+
 //    [self addObserver:self forKeyPath:@"videoDeviceInput.device.exposureMode" options:(NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:ExposureModeContext];
 //    [self addObserver:self forKeyPath:@"videoDeviceInput.device.exposureDuration" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:ExposureDurationContext];
 //    [self addObserver:self forKeyPath:@"videoDeviceInput.device.ISO" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:ISOContext];
@@ -824,6 +899,22 @@ static void *ISOContext = &ISOContext;
     [self removeObserver:self forKeyPath:@"videoDevice.exposureMode" context:ExposureModeContext];
     [self removeObserver:self forKeyPath:@"videoDevice.exposureDuration" context:ExposureDurationContext];
     [self removeObserver:self forKeyPath:@"videoDevice.ISO" context:ISOContext];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+#if TARGET_IPHONE_SIMULATOR
+    return;
+#endif
+
+    if (context == LensPositionContext) {
+        float newLensPosition = [change[NSKeyValueChangeNewKey] floatValue];
+        if ( !self.focusSlider.isTracking ) {
+            self.focusSlider.value = newLensPosition;
+        } /* else {
+            NSLog(@"lens moved but slider is tracking");
+        } */
+    }
 }
 
 - (void)subjectAreaDidChange:(NSNotification *)notification {
