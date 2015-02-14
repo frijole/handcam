@@ -12,7 +12,7 @@
 
 #import "LPCButton.h"
 
-@interface ViewController : UIViewController
+@interface CameraViewController : UIViewController
 
 @property (nonatomic, strong) IBOutlet AAPLPreviewView *previewView;
 
@@ -53,6 +53,7 @@
 
 @property (nonatomic, weak) IBOutlet UIView *thumbnailContainer;
 @property (nonatomic, weak) IBOutlet UIImageView *thumbnailImageView;
+- (IBAction)thumbnailTapped:(id)sender;
 
 @property (nonatomic, weak) IBOutlet UIView *videoSwitchContainer;
 @property (nonatomic, weak) IBOutlet UIImageView *videoSwitch;

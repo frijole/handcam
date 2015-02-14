@@ -6,21 +6,24 @@
 //  Copyright (c) 2014 frijole. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "CameraViewController.h"
 
 #import <AVFoundation/AVFoundation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
+#import <Photos/Photos.h>
 
 #import "TargetConditionals.h"
 
 #import "UILabel+Shake.h"
 #import "LPCFocusView.h"
+#import "PhotosViewController.h"
 
 #define NSStringFromRecognizerState(UIGestureRecognizerState) @[@"UIGestureRecognizerStatePossible", @"UIGestureRecognizerStateBegan", @"UIGestureRecognizerStateChanged", @"UIGestureRecognizerStateEnded", @"UIGestureRecognizerStateCancelled", @"UIGestureRecognizerStateFailed", @"UIGestureRecognizerStateRecognized"][UIGestureRecognizerState]
 
+#define LOG_PREFS 0
+
 // for camera
 static void *CapturingStillImageContext = &CapturingStillImageContext;
-static void *RecordingContext = &RecordingContext;
 static void *SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDeviceAuthorizedContext;
 
 static void *FocusModeContext = &FocusModeContext;
@@ -30,7 +33,7 @@ static void *ExposureDurationContext = &ExposureDurationContext;
 static void *ISOContext = &ISOContext;
 // end camera stuff
 
-@interface ViewController () <AVCaptureFileOutputRecordingDelegate, UIGestureRecognizerDelegate>
+@interface CameraViewController () <AVCaptureFileOutputRecordingDelegate, UIGestureRecognizerDelegate, PHPhotoLibraryChangeObserver>
 
 @property (nonatomic) NSArray *isoValues;
 @property (nonatomic) NSInteger currentISO;
@@ -64,9 +67,11 @@ static void *ISOContext = &ISOContext;
 @property (nonatomic) id runtimeErrorHandlingObserver;
 // end camera stuff
 
+@property (nonatomic) UIDeviceOrientation displayDeviceOrientation;
+
 @end
 
-@implementation ViewController
+@implementation CameraViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -91,23 +96,43 @@ static void *ISOContext = &ISOContext;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationChanged) name:UIDeviceOrientationDidChangeNotification object:nil];
 
     // grab iso and shutter from the prefs
-    // TODO: update iso and shutter values
-    
-#if TARGET_IPHONE_SIMULATOR
-    return;
+    if ( [[NSUserDefaults standardUserDefaults] objectForKey:@"ISO"] ) {
+        [self.isoLabel setText:[NSString stringWithFormat:@"%@",@([[NSUserDefaults standardUserDefaults] integerForKey:@"ISO"])]];
+#if LOG_PREFS
+        NSLog(@"set iso %@ from prefs", self.isoLabel.text);
+    } else {
+        NSLog(@"no iso in prefs");
+    }
+#else 
+    }
 #endif
-    
+
+    if ( [[NSUserDefaults standardUserDefaults] objectForKey:@"shutter"] ) {
+        [self.shutterLabel setText:[NSString stringWithFormat:@"%@",@([[NSUserDefaults standardUserDefaults] integerForKey:@"shutter"])]];
+#if LOG_PREFS
+        NSLog(@"set shutter %@ from prefs", self.shutterLabel.text);
+    } else {
+        NSLog(@"no shutter value in prefs");
+    }
+#else
+}
+#endif
+
     [self setupCamera];
+
+    [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
+    [self.previewView setAlpha:0.0f];
+
 #if TARGET_IPHONE_SIMULATOR
     return;
 #endif
-
-    [self.previewView setAlpha:0.0f];
+    
+    [self updateThumbnailFromPhotoLibrary];
     
     dispatch_async([self sessionQueue], ^{
         [self addObservers];
@@ -120,19 +145,23 @@ static void *ISOContext = &ISOContext;
 {
     [super viewDidAppear:animated];
     
-    [UIView animateWithDuration:0.2f
-                          delay:0.5f
+    [UIView animateWithDuration:0.25f
+                          delay:self.session.isRunning?0.0f:0.5f
                         options:0
                      animations:^{
-                         [self.previewView setAlpha:1.0f];
+                         if ( [[self session] isRunning] ) {
+                             [self.previewView setAlpha:1.0f];
+                         }
                      } completion:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-    dispatch_async([self sessionQueue], ^{
-        [[self session] stopRunning];
-        [self removeObservers];
-    });
+    if ( [self sessionQueue] ) {
+        dispatch_async([self sessionQueue], ^{
+            [[self session] stopRunning];
+            [self removeObservers];
+        });
+    }
     
     [super viewDidDisappear:animated];
 }
@@ -156,10 +185,31 @@ static void *ISOContext = &ISOContext;
     [self.previewView setAlpha:1.0f];
 }
 
+#pragma mark - 
+- (void)photoLibraryDidChange:(PHChange *)changeInstance
+{
+    // grab the most recent image and update the thumbnail
+    NSLog(@"photoLibraryDidChange");
+}
+
+- (void)updateThumbnailFromPhotoLibrary
+{
+    PHFetchOptions *fetchOptions = [PHFetchOptions new];
+    fetchOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO]];
+    PHFetchResult *fetchResult = [PHAsset fetchAssetsWithOptions:fetchOptions];
+    PHAsset *firstAsset = [fetchResult firstObject];
+    PHImageRequestOptions *imageRequestOptions = [PHImageRequestOptions new];
+    [imageRequestOptions setResizeMode:PHImageRequestOptionsResizeModeFast];
+    [imageRequestOptions setDeliveryMode:PHImageRequestOptionsDeliveryModeOpportunistic];
+    [[PHImageManager defaultManager] requestImageForAsset:firstAsset targetSize:self.thumbnailImageView.frame.size contentMode:PHImageContentModeAspectFill options:imageRequestOptions resultHandler:^(UIImage *result, NSDictionary *info) {
+        [self.thumbnailImageView setImage:result];
+    }];
+}
+
 #pragma mark - Touches
 - (void)longPressGestureRecognizerFired:(UILongPressGestureRecognizer *)longPressRecognizer {
     // NSLog(@"long press recognizer fired, state: %@", NSStringFromRecognizerState(longPressRecognizer.state));
-    CGPoint touchLocation = [longPressRecognizer locationInView:self.previewView];
+    CGPoint touchLocation = [longPressRecognizer locationInView:self.viewfinderFrame];
     if ( longPressRecognizer.state == UIGestureRecognizerStateBegan ) {
         [self setTouchActive:YES];
         [self setFocusLocked:YES];
@@ -336,6 +386,12 @@ static void *ISOContext = &ISOContext;
     }
 }
 
+
+- (void)thumbnailTapped:(id)sender
+{
+    [self performSegueWithIdentifier:@"showPhotosSegue" sender:nil];    
+}
+
 - (void)deviceOrientationChanged {
     UIDeviceOrientation toDeviceOrientation = [[UIDevice currentDevice] orientation];
     
@@ -378,6 +434,8 @@ static void *ISOContext = &ISOContext;
         return;
     }
 
+    [self setDisplayDeviceOrientation:toDeviceOrientation];
+    
     CGAffineTransform tmpTransform = CGAffineTransformMakeRotation(tmpRotation);
     if ( CGAffineTransformIsIdentity(tmpFocusIconTransform) ) {
         tmpFocusIconTransform = tmpTransform;
@@ -438,7 +496,8 @@ static void *ISOContext = &ISOContext;
         NSLog(@"%@", error);
     } else {
         _currentISO = newISO;
-        // TODO: save to prefs
+        // save to prefs
+        [[NSUserDefaults standardUserDefaults] setInteger:newISO forKey:@"ISO"];
     }
 }
 
@@ -477,7 +536,8 @@ static void *ISOContext = &ISOContext;
     }
     else {
         _currentShutterDuration = newShutterDuration;
-        // TODO: save to prefs
+        // save to prefs
+        [[NSUserDefaults standardUserDefaults] setInteger:newShutterDuration forKey:@"shutter"];
     }
 }
 
@@ -687,6 +747,10 @@ static void *ISOContext = &ISOContext;
 
 #pragma mark - Camera
 - (void)setupCamera {
+#if TARGET_IPHONE_SIMULATOR
+    return;
+#endif
+    
     // Create the AVCaptureSession
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
     [self setSession:session];
@@ -709,7 +773,7 @@ static void *ISOContext = &ISOContext;
         
         NSError *error = nil;
         
-        AVCaptureDevice *videoDevice = [ViewController deviceWithMediaType:AVMediaTypeVideo preferringPosition:AVCaptureDevicePositionBack];
+        AVCaptureDevice *videoDevice = [CameraViewController deviceWithMediaType:AVMediaTypeVideo preferringPosition:AVCaptureDevicePositionBack];
         AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
         
         if (error) {
@@ -822,32 +886,68 @@ static void *ISOContext = &ISOContext;
 
 - (IBAction)shutterButtonPressed:(id)sender
 {
+#if TARGET_IPHONE_SIMULATOR
+#else
     [self snapStillImage:nil];
+#endif
+}
 
-    AudioServicesPlaySystemSound(1108);
+- (IBAction)shutterButtonHeld:(id)sender
+{
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[[self previewView] layer] setOpacity:0.0];
-        [UIView animateWithDuration:.25 animations:^{
-            [[[self previewView] layer] setOpacity:1.0];
-        }];
-    });
 }
 
 - (void)snapStillImage:(id)sender
 {
     dispatch_async([self sessionQueue], ^{
         // Update the orientation on the still image output video connection before capturing.
-        [[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:[[(AVCaptureVideoPreviewLayer *)[[self previewView] layer] connection] videoOrientation]];
+        AVCaptureVideoOrientation videoOrientation = AVCaptureVideoOrientationPortrait;
+        switch ( self.displayDeviceOrientation ) {
+            case UIDeviceOrientationLandscapeLeft:
+                videoOrientation = AVCaptureVideoOrientationLandscapeLeft;
+                break;
+            case UIDeviceOrientationLandscapeRight:
+                videoOrientation = AVCaptureVideoOrientationLandscapeRight;
+                break;
+            case UIDeviceOrientationPortraitUpsideDown:
+                videoOrientation = AVCaptureVideoOrientationPortraitUpsideDown;
+                break;
+            default:
+                break;
+        }
+        [[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:videoOrientation];
         
         // Capture a still image
+        [self.previewView setAlpha:0.0f];
+
         [[self stillImageOutput] captureStillImageAsynchronouslyFromConnection:[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
-            
+
+            [self.previewView setAlpha:1.0f];
+
             if (imageDataSampleBuffer)
             {
                 NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
                 UIImage *image = [[UIImage alloc] initWithData:imageData];
                 [[[ALAssetsLibrary alloc] init] writeImageToSavedPhotosAlbum:[image CGImage] orientation:(ALAssetOrientation)[image imageOrientation] completionBlock:nil];
+                
+                if ( ![self.thumbnailImageView.layer animationForKey:@"thumbnail"] ) {
+                    CATransition *transition = [CATransition animation];
+                    transition.duration = 0.2f;
+                    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+                    transition.type = kCATransitionMoveIn;
+                    if ( self.displayDeviceOrientation == UIDeviceOrientationPortrait ) {
+                        transition.subtype = kCATransitionFromRight;
+                    } else if ( self.displayDeviceOrientation == UIDeviceOrientationPortraitUpsideDown ) {
+                        transition.subtype = kCATransitionFromLeft;
+                    } else if ( self.displayDeviceOrientation == UIDeviceOrientationLandscapeLeft ) {
+                        transition.subtype = kCATransitionFromBottom;
+                    } else if ( self.displayDeviceOrientation == UIDeviceOrientationLandscapeRight ) {
+                        transition.subtype = kCATransitionFromTop;
+                    }
+                    
+                    [self.thumbnailImageView.layer addAnimation:transition forKey:@"thumbnail"];
+                }
+                [self.thumbnailImageView setImage:image];
             }
         }];
     });
@@ -860,7 +960,7 @@ static void *ISOContext = &ISOContext;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
     
-//    [self addObserver:self forKeyPath:@"sessionRunningAndDeviceAuthorized" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:SessionRunningAndDeviceAuthorizedContext];
+    [self addObserver:self forKeyPath:@"sessionRunningAndDeviceAuthorized" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:SessionRunningAndDeviceAuthorizedContext];
 //    [self addObserver:self forKeyPath:@"stillImageOutput.capturingStillImage" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:CapturingStillImageContext];
 //    [self addObserver:self forKeyPath:@"movieFileOutput.recording" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:RecordingContext];
 //    
@@ -873,9 +973,9 @@ static void *ISOContext = &ISOContext;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(subjectAreaDidChange:) name:AVCaptureDeviceSubjectAreaDidChangeNotification object:[self videoDevice]];
     
-    __weak ViewController *weakSelf = self;
+    __weak CameraViewController *weakSelf = self;
     [self setRuntimeErrorHandlingObserver:[[NSNotificationCenter defaultCenter] addObserverForName:AVCaptureSessionRuntimeErrorNotification object:[self session] queue:nil usingBlock:^(NSNotification *note) {
-        ViewController *strongSelf = weakSelf;
+        CameraViewController *strongSelf = weakSelf;
         dispatch_async([strongSelf sessionQueue], ^{
             // Manually restart the session since it must have been stopped due to an error
             [[strongSelf session] startRunning];
@@ -891,7 +991,6 @@ static void *ISOContext = &ISOContext;
     
     [self removeObserver:self forKeyPath:@"sessionRunningAndDeviceAuthorized" context:SessionRunningAndDeviceAuthorizedContext];
     [self removeObserver:self forKeyPath:@"stillImageOutput.capturingStillImage" context:CapturingStillImageContext];
-    [self removeObserver:self forKeyPath:@"movieFileOutput.recording" context:RecordingContext];
     
     [self removeObserver:self forKeyPath:@"videoDevice.focusMode" context:FocusModeContext];
     [self removeObserver:self forKeyPath:@"videoDevice.lensPosition" context:LensPositionContext];
@@ -907,13 +1006,51 @@ static void *ISOContext = &ISOContext;
     return;
 #endif
 
-    if (context == LensPositionContext) {
+    if (context == SessionRunningAndDeviceAuthorizedContext)
+    {
+        BOOL isRunning = [change[NSKeyValueChangeNewKey] boolValue];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (isRunning)
+            {
+                NSLog(@"RUNNING AND AUTHORIZED");
+                [self.shutterButton setEnabled:YES];
+                [UIView animateWithDuration:0.2f
+                 animations:^{
+                     [self.previewView setAlpha:1.0f];
+                 }];
+            }
+            else
+            {
+                NSLog(@"NOT RUNNING/NOT AUTHORIZED");
+                [self.shutterButton setEnabled:NO];
+                [UIView animateWithDuration:0.2f
+                                 animations:^{
+                                     [self.previewView setAlpha:0.0f];
+                                 }];
+            }
+        });
+    }
+    else if (context == LensPositionContext) {
         float newLensPosition = [change[NSKeyValueChangeNewKey] floatValue];
         if ( !self.focusSlider.isTracking ) {
             self.focusSlider.value = newLensPosition;
         } /* else {
             NSLog(@"lens moved but slider is tracking");
         } */
+    }
+    else if (context == CapturingStillImageContext) {
+        BOOL isCapturingStillImage = [change[NSKeyValueChangeNewKey] boolValue];
+        if (isCapturingStillImage) {
+            AudioServicesPlaySystemSound(1108);
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[[self previewView] layer] setOpacity:0.0];
+                [UIView animateWithDuration:.25 animations:^{
+                    [[[self previewView] layer] setOpacity:1.0];
+                }];
+            });
+        }
     }
 }
 
