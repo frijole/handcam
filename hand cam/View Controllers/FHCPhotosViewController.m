@@ -6,34 +6,39 @@
 //  Copyright (c) 2014 Ian Meyer. All rights reserved.
 //
 
-#import "PhotosViewController.h"
+#import "FHCPhotosViewController.h"
 
 #import <Photos/Photos.h>
 
-@interface PhotosViewController ()
+@interface FHCPhotosViewController ()
 
 @property (nonatomic, strong) UIPanGestureRecognizer *currentPhotoPanRecognizer;
 @property (nonatomic, strong) UIDynamicAnimator *animator;
 
 @end
 
-@implementation PhotosViewController
+@implementation FHCPhotosViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
     
+    // one-time nib cleanup of the next card
+    if ( self.nextCard ) {
+        [self.nextCard setTransform:CGAffineTransformMakeScale(0.95f, 0.95f)];
+    }
+
+    // general prep
     [self prepareCurrentCard];
     [self prepareNextCard];
-    
-    self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
 
+    // ooh shiny
+    self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
 }
 
 - (BOOL)prefersStatusBarHidden
 {
-    return YES;
+    return NO;
 }
 
 - (void)presentNextCard
@@ -60,7 +65,15 @@
 - (void)prepareCurrentCard
 {
     if ( !self.currentCard ) {
-        // wut
+        // TODD: create current card if necessary
+        [self setCurrentCard:[PhotoView new]];
+        [self.currentCard setAutoresizingMask:UIViewAutoresizingNone];
+        [self.currentCard setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self.view addSubview:self.currentCard];
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.currentCard attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0f constant:-20.0f]];
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.currentCard attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.currentCard attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0.0f]];
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.currentCard attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:0.0f]];
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.currentCard attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f]];
     }
     
     // TODO: prepare current photo!
@@ -75,13 +88,14 @@
 - (void)prepareNextCard
 {
     if ( !self.nextCard ) {
-        // TODO: create next card if necessary
+        // create next card if necessary
         [self setNextCard:[PhotoView new]];
+        [self.nextCard setBackgroundColor:[UIColor whiteColor]];
         [self.nextCard setAutoresizingMask:UIViewAutoresizingNone];
         [self.nextCard setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.view insertSubview:self.nextCard belowSubview:self.currentCard];
         [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nextCard attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0f constant:-20.0f]];
-        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nextCard attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeHeight multiplier:1.0f constant:-20.0f]];
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nextCard attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.nextCard attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0.0f]];
         [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nextCard attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:0.0f]];
         [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nextCard attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f]];
     }
@@ -89,7 +103,7 @@
     // TODO: update photo on card!
     
     [UIView performWithoutAnimation:^{
-        [self.nextCard setBackgroundColor:[UIColor lightGrayColor]];
+        [self.nextCard setAlpha:0.75f];
         [self.nextCard setTransform:CGAffineTransformMakeScale(0.95f, 0.95f)];
         [self.view layoutIfNeeded];
     }];

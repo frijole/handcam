@@ -8,20 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		3C99B93919CE2AB900A70C94 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C99B93819CE2AB900A70C94 /* main.m */; };
-		3C99B93C19CE2AB900A70C94 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C99B93B19CE2AB900A70C94 /* AppDelegate.m */; };
-		3C99B93F19CE2AB900A70C94 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C99B93E19CE2AB900A70C94 /* CameraViewController.m */; };
+		3C99B93C19CE2AB900A70C94 /* FHCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C99B93B19CE2AB900A70C94 /* FHCAppDelegate.m */; };
+		3C99B93F19CE2AB900A70C94 /* FHCCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C99B93E19CE2AB900A70C94 /* FHCCameraViewController.m */; };
 		3C99B94219CE2AB900A70C94 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C99B94019CE2AB900A70C94 /* Main.storyboard */; };
 		3C99B94419CE2AB900A70C94 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C99B94319CE2AB900A70C94 /* Images.xcassets */; };
 		3C99B94719CE2AB900A70C94 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C99B94519CE2AB900A70C94 /* LaunchScreen.xib */; };
-		3C99B95319CE2AB900A70C94 /* ice_lollyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C99B95219CE2AB900A70C94 /* ice_lollyTests.m */; };
+		3C99B95319CE2AB900A70C94 /* handcamTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C99B95219CE2AB900A70C94 /* handcamTests.m */; };
 		3C99B96119CF3ADB00A70C94 /* AAPLPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C99B96019CF3ADB00A70C94 /* AAPLPreviewView.m */; };
 		3C99B96419CF485B00A70C94 /* UILabel+Shake.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C99B96319CF485B00A70C94 /* UILabel+Shake.m */; };
-		3C99B96719CF4A3D00A70C94 /* LPCButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C99B96619CF4A3D00A70C94 /* LPCButton.m */; };
+		3C99B96719CF4A3D00A70C94 /* FHCShutterButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C99B96619CF4A3D00A70C94 /* FHCShutterButton.m */; };
 		3C99B96A19CF4A5900A70C94 /* UIImage+Colors.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C99B96919CF4A5900A70C94 /* UIImage+Colors.m */; };
 		3CB99C1919CF915E00683BE0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CB99C1819CF915E00683BE0 /* AVFoundation.framework */; };
-		3CE961DB19D6DB56007CA04A /* LPCFocusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CE961DA19D6DB56007CA04A /* LPCFocusView.m */; };
+		3CE961DB19D6DB56007CA04A /* FHCFocusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CE961DA19D6DB56007CA04A /* FHCFocusView.m */; };
 		3CE961DE19D6E4F2007CA04A /* UIView+Blur.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CE961DD19D6E4F2007CA04A /* UIView+Blur.m */; };
-		3CF7D5561A8BD63000F7B78E /* PhotosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7D5551A8BD63000F7B78E /* PhotosViewController.m */; };
+		3CF7D5561A8BD63000F7B78E /* FHCPhotosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7D5551A8BD63000F7B78E /* FHCPhotosViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,34 +35,34 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3C99B93319CE2AB900A70C94 /* ice lolly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ice lolly.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C99B93319CE2AB900A70C94 /* hand cam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "hand cam.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C99B93719CE2AB900A70C94 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3C99B93819CE2AB900A70C94 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		3C99B93A19CE2AB900A70C94 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		3C99B93B19CE2AB900A70C94 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		3C99B93D19CE2AB900A70C94 /* CameraViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
-		3C99B93E19CE2AB900A70C94 /* CameraViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
+		3C99B93A19CE2AB900A70C94 /* FHCAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FHCAppDelegate.h; sourceTree = "<group>"; };
+		3C99B93B19CE2AB900A70C94 /* FHCAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FHCAppDelegate.m; sourceTree = "<group>"; };
+		3C99B93D19CE2AB900A70C94 /* FHCCameraViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FHCCameraViewController.h; sourceTree = "<group>"; };
+		3C99B93E19CE2AB900A70C94 /* FHCCameraViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FHCCameraViewController.m; sourceTree = "<group>"; };
 		3C99B94119CE2AB900A70C94 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3C99B94319CE2AB900A70C94 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3C99B94619CE2AB900A70C94 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		3C99B94C19CE2AB900A70C94 /* ice lollyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ice lollyTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C99B94C19CE2AB900A70C94 /* hand camTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "hand camTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C99B95119CE2AB900A70C94 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3C99B95219CE2AB900A70C94 /* ice_lollyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ice_lollyTests.m; sourceTree = "<group>"; };
+		3C99B95219CE2AB900A70C94 /* handcamTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = handcamTests.m; sourceTree = "<group>"; };
 		3C99B95F19CF3ADB00A70C94 /* AAPLPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAPLPreviewView.h; sourceTree = "<group>"; };
 		3C99B96019CF3ADB00A70C94 /* AAPLPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAPLPreviewView.m; sourceTree = "<group>"; };
 		3C99B96219CF485B00A70C94 /* UILabel+Shake.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+Shake.h"; sourceTree = "<group>"; };
 		3C99B96319CF485B00A70C94 /* UILabel+Shake.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+Shake.m"; sourceTree = "<group>"; };
-		3C99B96519CF4A3D00A70C94 /* LPCButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LPCButton.h; sourceTree = "<group>"; };
-		3C99B96619CF4A3D00A70C94 /* LPCButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LPCButton.m; sourceTree = "<group>"; };
+		3C99B96519CF4A3D00A70C94 /* FHCShutterButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHCShutterButton.h; sourceTree = "<group>"; };
+		3C99B96619CF4A3D00A70C94 /* FHCShutterButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHCShutterButton.m; sourceTree = "<group>"; };
 		3C99B96819CF4A5900A70C94 /* UIImage+Colors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Colors.h"; sourceTree = "<group>"; };
 		3C99B96919CF4A5900A70C94 /* UIImage+Colors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Colors.m"; sourceTree = "<group>"; };
 		3CB99C1819CF915E00683BE0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		3CE961D919D6DB56007CA04A /* LPCFocusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LPCFocusView.h; sourceTree = "<group>"; };
-		3CE961DA19D6DB56007CA04A /* LPCFocusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LPCFocusView.m; sourceTree = "<group>"; };
+		3CE961D919D6DB56007CA04A /* FHCFocusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHCFocusView.h; sourceTree = "<group>"; };
+		3CE961DA19D6DB56007CA04A /* FHCFocusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHCFocusView.m; sourceTree = "<group>"; };
 		3CE961DC19D6E4F2007CA04A /* UIView+Blur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Blur.h"; sourceTree = "<group>"; };
 		3CE961DD19D6E4F2007CA04A /* UIView+Blur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Blur.m"; sourceTree = "<group>"; };
-		3CF7D5541A8BD63000F7B78E /* PhotosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotosViewController.h; sourceTree = "<group>"; };
-		3CF7D5551A8BD63000F7B78E /* PhotosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotosViewController.m; sourceTree = "<group>"; };
+		3CF7D5541A8BD63000F7B78E /* FHCPhotosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHCPhotosViewController.h; sourceTree = "<group>"; };
+		3CF7D5551A8BD63000F7B78E /* FHCPhotosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHCPhotosViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,9 +87,9 @@
 		3C99B92A19CE2AB900A70C94 = {
 			isa = PBXGroup;
 			children = (
-				3C99B93519CE2AB900A70C94 /* ice lolly */,
+				3C99B93519CE2AB900A70C94 /* hand cam */,
 				3CB99C1A19CFC79B00683BE0 /* Frameworks */,
-				3C99B94F19CE2AB900A70C94 /* ice lollyTests */,
+				3C99B94F19CE2AB900A70C94 /* Tests */,
 				3C99B93419CE2AB900A70C94 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -97,28 +97,23 @@
 		3C99B93419CE2AB900A70C94 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3C99B93319CE2AB900A70C94 /* ice lolly.app */,
-				3C99B94C19CE2AB900A70C94 /* ice lollyTests.xctest */,
+				3C99B93319CE2AB900A70C94 /* hand cam.app */,
+				3C99B94C19CE2AB900A70C94 /* hand camTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		3C99B93519CE2AB900A70C94 /* ice lolly */ = {
+		3C99B93519CE2AB900A70C94 /* hand cam */ = {
 			isa = PBXGroup;
 			children = (
-				3C99B93A19CE2AB900A70C94 /* AppDelegate.h */,
-				3C99B93B19CE2AB900A70C94 /* AppDelegate.m */,
-				3C99B93D19CE2AB900A70C94 /* CameraViewController.h */,
-				3C99B93E19CE2AB900A70C94 /* CameraViewController.m */,
-				3CF7D5541A8BD63000F7B78E /* PhotosViewController.h */,
-				3CF7D5551A8BD63000F7B78E /* PhotosViewController.m */,
+				3C99B93A19CE2AB900A70C94 /* FHCAppDelegate.h */,
+				3C99B93B19CE2AB900A70C94 /* FHCAppDelegate.m */,
 				3C99B94019CE2AB900A70C94 /* Main.storyboard */,
-				3C99B94519CE2AB900A70C94 /* LaunchScreen.xib */,
-				3C99B94319CE2AB900A70C94 /* Images.xcassets */,
-				3C99B96B19CF692E00A70C94 /* Parts */,
+				3CFEE4D41A8F7679005C85C5 /* View Controllers */,
+				3C99B96B19CF692E00A70C94 /* Views, Categories, etc.  */,
 				3C99B93619CE2AB900A70C94 /* Supporting Files */,
 			);
-			path = "ice lolly";
+			path = "hand cam";
 			sourceTree = "<group>";
 		};
 		3C99B93619CE2AB900A70C94 /* Supporting Files */ = {
@@ -126,17 +121,19 @@
 			children = (
 				3C99B93719CE2AB900A70C94 /* Info.plist */,
 				3C99B93819CE2AB900A70C94 /* main.m */,
+				3C99B94519CE2AB900A70C94 /* LaunchScreen.xib */,
+				3C99B94319CE2AB900A70C94 /* Images.xcassets */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		3C99B94F19CE2AB900A70C94 /* ice lollyTests */ = {
+		3C99B94F19CE2AB900A70C94 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				3C99B95219CE2AB900A70C94 /* ice_lollyTests.m */,
+				3C99B95219CE2AB900A70C94 /* handcamTests.m */,
 				3C99B95019CE2AB900A70C94 /* Supporting Files */,
 			);
-			path = "ice lollyTests";
+			path = Tests;
 			sourceTree = "<group>";
 		};
 		3C99B95019CE2AB900A70C94 /* Supporting Files */ = {
@@ -147,23 +144,24 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		3C99B96B19CF692E00A70C94 /* Parts */ = {
+		3C99B96B19CF692E00A70C94 /* Views, Categories, etc.  */ = {
 			isa = PBXGroup;
 			children = (
-				3C99B96219CF485B00A70C94 /* UILabel+Shake.h */,
-				3C99B96319CF485B00A70C94 /* UILabel+Shake.m */,
 				3C99B95F19CF3ADB00A70C94 /* AAPLPreviewView.h */,
 				3C99B96019CF3ADB00A70C94 /* AAPLPreviewView.m */,
-				3C99B96519CF4A3D00A70C94 /* LPCButton.h */,
-				3C99B96619CF4A3D00A70C94 /* LPCButton.m */,
-				3C99B96819CF4A5900A70C94 /* UIImage+Colors.h */,
-				3C99B96919CF4A5900A70C94 /* UIImage+Colors.m */,
-				3CE961D919D6DB56007CA04A /* LPCFocusView.h */,
-				3CE961DA19D6DB56007CA04A /* LPCFocusView.m */,
+				3C99B96519CF4A3D00A70C94 /* FHCShutterButton.h */,
+				3C99B96619CF4A3D00A70C94 /* FHCShutterButton.m */,
+				3CE961D919D6DB56007CA04A /* FHCFocusView.h */,
+				3CE961DA19D6DB56007CA04A /* FHCFocusView.m */,
+				3C99B96219CF485B00A70C94 /* UILabel+Shake.h */,
+				3C99B96319CF485B00A70C94 /* UILabel+Shake.m */,
 				3CE961DC19D6E4F2007CA04A /* UIView+Blur.h */,
 				3CE961DD19D6E4F2007CA04A /* UIView+Blur.m */,
+				3C99B96819CF4A5900A70C94 /* UIImage+Colors.h */,
+				3C99B96919CF4A5900A70C94 /* UIImage+Colors.m */,
 			);
-			name = Parts;
+			name = "Views, Categories, etc. ";
+			path = Components;
 			sourceTree = "<group>";
 		};
 		3CB99C1A19CFC79B00683BE0 /* Frameworks */ = {
@@ -174,12 +172,23 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		3CFEE4D41A8F7679005C85C5 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				3C99B93D19CE2AB900A70C94 /* FHCCameraViewController.h */,
+				3C99B93E19CE2AB900A70C94 /* FHCCameraViewController.m */,
+				3CF7D5541A8BD63000F7B78E /* FHCPhotosViewController.h */,
+				3CF7D5551A8BD63000F7B78E /* FHCPhotosViewController.m */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3C99B93219CE2AB900A70C94 /* ice lolly */ = {
+		3C99B93219CE2AB900A70C94 /* hand cam */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3C99B95619CE2AB900A70C94 /* Build configuration list for PBXNativeTarget "ice lolly" */;
+			buildConfigurationList = 3C99B95619CE2AB900A70C94 /* Build configuration list for PBXNativeTarget "hand cam" */;
 			buildPhases = (
 				3C99B92F19CE2AB900A70C94 /* Sources */,
 				3C99B93019CE2AB900A70C94 /* Frameworks */,
@@ -189,14 +198,14 @@
 			);
 			dependencies = (
 			);
-			name = "ice lolly";
+			name = "hand cam";
 			productName = "ice lolly";
-			productReference = 3C99B93319CE2AB900A70C94 /* ice lolly.app */;
+			productReference = 3C99B93319CE2AB900A70C94 /* hand cam.app */;
 			productType = "com.apple.product-type.application";
 		};
-		3C99B94B19CE2AB900A70C94 /* ice lollyTests */ = {
+		3C99B94B19CE2AB900A70C94 /* hand camTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3C99B95919CE2AB900A70C94 /* Build configuration list for PBXNativeTarget "ice lollyTests" */;
+			buildConfigurationList = 3C99B95919CE2AB900A70C94 /* Build configuration list for PBXNativeTarget "hand camTests" */;
 			buildPhases = (
 				3C99B94819CE2AB900A70C94 /* Sources */,
 				3C99B94919CE2AB900A70C94 /* Frameworks */,
@@ -207,9 +216,9 @@
 			dependencies = (
 				3C99B94E19CE2AB900A70C94 /* PBXTargetDependency */,
 			);
-			name = "ice lollyTests";
+			name = "hand camTests";
 			productName = "ice lollyTests";
-			productReference = 3C99B94C19CE2AB900A70C94 /* ice lollyTests.xctest */;
+			productReference = 3C99B94C19CE2AB900A70C94 /* hand camTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -218,6 +227,7 @@
 		3C99B92B19CE2AB900A70C94 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = FHC;
 				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = frijole;
 				TargetAttributes = {
@@ -244,8 +254,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3C99B93219CE2AB900A70C94 /* ice lolly */,
-				3C99B94B19CE2AB900A70C94 /* ice lollyTests */,
+				3C99B93219CE2AB900A70C94 /* hand cam */,
+				3C99B94B19CE2AB900A70C94 /* hand camTests */,
 			);
 		};
 /* End PBXProject section */
@@ -275,16 +285,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3C99B93F19CE2AB900A70C94 /* CameraViewController.m in Sources */,
+				3C99B93F19CE2AB900A70C94 /* FHCCameraViewController.m in Sources */,
 				3CE961DE19D6E4F2007CA04A /* UIView+Blur.m in Sources */,
-				3C99B93C19CE2AB900A70C94 /* AppDelegate.m in Sources */,
+				3C99B93C19CE2AB900A70C94 /* FHCAppDelegate.m in Sources */,
 				3C99B96419CF485B00A70C94 /* UILabel+Shake.m in Sources */,
-				3CF7D5561A8BD63000F7B78E /* PhotosViewController.m in Sources */,
-				3CE961DB19D6DB56007CA04A /* LPCFocusView.m in Sources */,
+				3CF7D5561A8BD63000F7B78E /* FHCPhotosViewController.m in Sources */,
+				3CE961DB19D6DB56007CA04A /* FHCFocusView.m in Sources */,
 				3C99B96A19CF4A5900A70C94 /* UIImage+Colors.m in Sources */,
 				3C99B93919CE2AB900A70C94 /* main.m in Sources */,
 				3C99B96119CF3ADB00A70C94 /* AAPLPreviewView.m in Sources */,
-				3C99B96719CF4A3D00A70C94 /* LPCButton.m in Sources */,
+				3C99B96719CF4A3D00A70C94 /* FHCShutterButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,7 +302,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3C99B95319CE2AB900A70C94 /* ice_lollyTests.m in Sources */,
+				3C99B95319CE2AB900A70C94 /* handcamTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,7 +311,7 @@
 /* Begin PBXTargetDependency section */
 		3C99B94E19CE2AB900A70C94 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 3C99B93219CE2AB900A70C94 /* ice lolly */;
+			target = 3C99B93219CE2AB900A70C94 /* hand cam */;
 			targetProxy = 3C99B94D19CE2AB900A70C94 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -408,9 +418,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				INFOPLIST_FILE = "ice lolly/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/hand cam/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "hand cam";
 				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
@@ -421,9 +431,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				INFOPLIST_FILE = "ice lolly/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/hand cam/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "hand cam";
 				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
@@ -440,10 +450,10 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "ice lollyTests/Info.plist";
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ice lolly.app/ice lolly";
+				PRODUCT_NAME = "hand camTests";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/hand cam.app/hand cam";
 			};
 			name = Debug;
 		};
@@ -455,10 +465,10 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "ice lollyTests/Info.plist";
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ice lolly.app/ice lolly";
+				PRODUCT_NAME = "hand camTests";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/hand cam.app/hand cam";
 			};
 			name = Release;
 		};
@@ -474,7 +484,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3C99B95619CE2AB900A70C94 /* Build configuration list for PBXNativeTarget "ice lolly" */ = {
+		3C99B95619CE2AB900A70C94 /* Build configuration list for PBXNativeTarget "hand cam" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3C99B95719CE2AB900A70C94 /* Debug */,
@@ -483,7 +493,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3C99B95919CE2AB900A70C94 /* Build configuration list for PBXNativeTarget "ice lollyTests" */ = {
+		3C99B95919CE2AB900A70C94 /* Build configuration list for PBXNativeTarget "hand camTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3C99B95A19CE2AB900A70C94 /* Debug */,

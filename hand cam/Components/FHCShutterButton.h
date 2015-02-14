@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LPCButton : UIButton
+@interface FHCShutterButton : UIButton
 
 @end

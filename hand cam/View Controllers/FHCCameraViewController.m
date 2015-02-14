@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 frijole. All rights reserved.
 //
 
-#import "CameraViewController.h"
+#import "FHCCameraViewController.h"
 
 #import <AVFoundation/AVFoundation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
@@ -15,8 +15,8 @@
 #import "TargetConditionals.h"
 
 #import "UILabel+Shake.h"
-#import "LPCFocusView.h"
-#import "PhotosViewController.h"
+#import "FHCFocusView.h"
+#import "FHCPhotosViewController.h"
 
 #define NSStringFromRecognizerState(UIGestureRecognizerState) @[@"UIGestureRecognizerStatePossible", @"UIGestureRecognizerStateBegan", @"UIGestureRecognizerStateChanged", @"UIGestureRecognizerStateEnded", @"UIGestureRecognizerStateCancelled", @"UIGestureRecognizerStateFailed", @"UIGestureRecognizerStateRecognized"][UIGestureRecognizerState]
 
@@ -33,7 +33,7 @@ static void *ExposureDurationContext = &ExposureDurationContext;
 static void *ISOContext = &ISOContext;
 // end camera stuff
 
-@interface CameraViewController () <AVCaptureFileOutputRecordingDelegate, UIGestureRecognizerDelegate, PHPhotoLibraryChangeObserver>
+@interface FHCCameraViewController () <AVCaptureFileOutputRecordingDelegate, UIGestureRecognizerDelegate, PHPhotoLibraryChangeObserver>
 
 @property (nonatomic) NSArray *isoValues;
 @property (nonatomic) NSInteger currentISO;
@@ -47,7 +47,7 @@ static void *ISOContext = &ISOContext;
 - (void)increaseShutterDuration;
 - (void)decreaseShutterDuration;
 
-@property (nonatomic, strong) LPCFocusView *focusView;
+@property (nonatomic, strong) FHCFocusView *focusView;
 @property (nonatomic) BOOL touchActive;
 @property (nonatomic) BOOL focusLocked;
 @property (nonatomic, strong) NSTimer *dismissFocusTimer;
@@ -71,7 +71,7 @@ static void *ISOContext = &ISOContext;
 
 @end
 
-@implementation CameraViewController
+@implementation FHCCameraViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -251,7 +251,7 @@ static void *ISOContext = &ISOContext;
     // handle the UI bits
     if ( !self.focusView ) {
         // create it and add it
-        LPCFocusView *tmpFocusView = [[LPCFocusView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 100.0f, 100.0f)];
+        FHCFocusView *tmpFocusView = [[FHCFocusView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 100.0f, 100.0f)];
         [tmpFocusView setCenter:point];
         [tmpFocusView setTransform:CGAffineTransformMakeScale(1.5f, 1.5f)];
         [self.viewfinderFrame setClipsToBounds:YES];
@@ -773,7 +773,7 @@ static void *ISOContext = &ISOContext;
         
         NSError *error = nil;
         
-        AVCaptureDevice *videoDevice = [CameraViewController deviceWithMediaType:AVMediaTypeVideo preferringPosition:AVCaptureDevicePositionBack];
+        AVCaptureDevice *videoDevice = [FHCCameraViewController deviceWithMediaType:AVMediaTypeVideo preferringPosition:AVCaptureDevicePositionBack];
         AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
         
         if (error) {
@@ -973,9 +973,9 @@ static void *ISOContext = &ISOContext;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(subjectAreaDidChange:) name:AVCaptureDeviceSubjectAreaDidChangeNotification object:[self videoDevice]];
     
-    __weak CameraViewController *weakSelf = self;
+    __weak FHCCameraViewController *weakSelf = self;
     [self setRuntimeErrorHandlingObserver:[[NSNotificationCenter defaultCenter] addObserverForName:AVCaptureSessionRuntimeErrorNotification object:[self session] queue:nil usingBlock:^(NSNotification *note) {
-        CameraViewController *strongSelf = weakSelf;
+        FHCCameraViewController *strongSelf = weakSelf;
         dispatch_async([strongSelf sessionQueue], ^{
             // Manually restart the session since it must have been stopped due to an error
             [[strongSelf session] startRunning];

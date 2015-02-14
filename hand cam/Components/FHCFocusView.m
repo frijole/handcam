@@ -6,19 +6,19 @@
 //  Copyright (c) 2014 Ian Meyer. All rights reserved.
 //
 
-#import "LPCFocusView.h"
+#import "FHCFocusView.h"
 
 #import "UIView+Blur.h"
 
 #define LINE_COLOR [UIColor colorWithHue:(180.0f/360.0f) saturation:1.0f brightness:1.0f alpha:0.5f]
 
-@interface LPCFocusView ()
+@interface FHCFocusView ()
 
 @property (nonatomic, strong ) UIImageView *lockView;
 
 @end
 
-@implementation LPCFocusView
+@implementation FHCFocusView
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];

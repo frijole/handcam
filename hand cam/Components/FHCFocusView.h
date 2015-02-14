@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LPCFocusView : UIView
+@interface FHCFocusView : UIView
 
 @property (nonatomic) BOOL locked;
 

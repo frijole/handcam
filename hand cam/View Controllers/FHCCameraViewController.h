@@ -10,9 +10,9 @@
 
 #import "AAPLPreviewView.h"
 
-#import "LPCButton.h"
+#import "FHCShutterButton.h"
 
-@interface CameraViewController : UIViewController
+@interface FHCCameraViewController : UIViewController
 
 @property (nonatomic, strong) IBOutlet AAPLPreviewView *previewView;
 
@@ -20,7 +20,7 @@
 @property (nonatomic, weak) IBOutlet UIImageView *isoIcon;
 @property (nonatomic, weak) IBOutlet UILabel *isoLabel;
 
-@property (nonatomic, weak) IBOutlet LPCButton *shutterButton;
+@property (nonatomic, weak) IBOutlet FHCShutterButton *shutterButton;
 -(IBAction)shutterButtonPressed:(id)sender;
 
 @property (nonatomic, weak) IBOutlet UIView *shutterContainer;

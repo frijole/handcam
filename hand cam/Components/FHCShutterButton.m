@@ -6,11 +6,11 @@
 //  Copyright (c) 2014 Ian Meyer All rights reserved.
 //
 
-#import "LPCButton.h"
+#import "FHCShutterButton.h"
 
 #import "UIImage+Colors.h"
 
-@implementation LPCButton
+@implementation FHCShutterButton
 
 - (instancetype)initWithFrame:(CGRect)frame
 {

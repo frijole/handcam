@@ -1,6 +1,6 @@
 //
-//  ice_lollyTests.m
-//  ice lollyTests
+//  handcamTests.m
+//  hand cam Tests
 //
 //  Created by Ian Meyer on 9/20/14.
 //  Copyright (c) 2014 frijole. All rights reserved.
@@ -9,11 +9,11 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
-@interface ice_lollyTests : XCTestCase
+@interface handcamTests : XCTestCase
 
 @end
 
-@implementation ice_lollyTests
+@implementation handcamTests
 
 - (void)setUp {
     [super setUp];

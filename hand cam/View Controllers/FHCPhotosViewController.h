@@ -10,7 +10,7 @@
 
 @class PhotoView;
 
-@interface PhotosViewController : UIViewController
+@interface FHCPhotosViewController : UIViewController
 
 @property (nonatomic, strong) IBOutlet PhotoView *currentCard;
 @property (nonatomic, strong) IBOutlet PhotoView *nextCard;

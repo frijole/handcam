@@ -6,13 +6,13 @@
 //  Copyright (c) 2014 frijole. All rights reserved.
 //
 
-#import "AppDelegate.h"
+#import "FHCAppDelegate.h"
 
-@interface AppDelegate ()
+@interface FHCAppDelegate ()
 
 @end
 
-@implementation AppDelegate
+@implementation FHCAppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
