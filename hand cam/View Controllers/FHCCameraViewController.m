@@ -1,4 +1,4 @@
-//
+    //
 //  ViewController.m
 //  ice lolly
 //
@@ -17,6 +17,7 @@
 #import "UILabel+Shake.h"
 #import "FHCFocusView.h"
 #import "FHCPhotosViewController.h"
+#import "FHCPhotoManager.h"
 
 #define NSStringFromRecognizerState(UIGestureRecognizerState) @[@"UIGestureRecognizerStatePossible", @"UIGestureRecognizerStateBegan", @"UIGestureRecognizerStateChanged", @"UIGestureRecognizerStateEnded", @"UIGestureRecognizerStateCancelled", @"UIGestureRecognizerStateFailed", @"UIGestureRecognizerStateRecognized"][UIGestureRecognizerState]
 
@@ -93,8 +94,6 @@ static void *ISOContext = &ISOContext;
     
     [self setSwipeRecognizers:@[self.swipeUpRecognizer, self.swipeDownRecognizer, self.swipeLeftRecognizer, self.swipeRightRecognizer]];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationChanged) name:UIDeviceOrientationDidChangeNotification object:nil];
-
     // grab iso and shutter from the prefs
     if ( [[NSUserDefaults standardUserDefaults] objectForKey:@"ISO"] ) {
         [self.isoLabel setText:[NSString stringWithFormat:@"%@",@([[NSUserDefaults standardUserDefaults] integerForKey:@"ISO"])]];
@@ -127,16 +126,20 @@ static void *ISOContext = &ISOContext;
     [super viewWillAppear:animated];
 
     [self.previewView setAlpha:0.0f];
+    
+    [self.focusControl setAlpha:self.focusLocked?0.0f:1.0f];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cameraRollUpdated:) name:kFHCPhotoManagerCameraRollUpdatedNotification object:nil];
+    [self updateThumbnailFromPhotoLibrary];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationChanged) name:UIDeviceOrientationDidChangeNotification object:nil];
 
 #if TARGET_IPHONE_SIMULATOR
     return;
 #endif
     
-    [self updateThumbnailFromPhotoLibrary];
-    
     dispatch_async([self sessionQueue], ^{
-        [self addObservers];
-        
+        [self addCameraObservers];
         [[self session] startRunning];
     });
 }
@@ -156,10 +159,13 @@ static void *ISOContext = &ISOContext;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
     if ( [self sessionQueue] ) {
         dispatch_async([self sessionQueue], ^{
             [[self session] stopRunning];
-            [self removeObservers];
+            [self removeCameraObservers];
         });
     }
     
@@ -185,7 +191,15 @@ static void *ISOContext = &ISOContext;
     [self.previewView setAlpha:1.0f];
 }
 
-#pragma mark - 
+#pragma mark - Camera Roll
+
+- (void)cameraRollUpdated:(NSNotification *)notification
+{
+    // NSLog(@"camera roll updated");
+    [self updateThumbnailFromPhotoLibrary];
+}
+
+#pragma mark -
 - (void)photoLibraryDidChange:(PHChange *)changeInstance
 {
     // grab the most recent image and update the thumbnail
@@ -194,16 +208,7 @@ static void *ISOContext = &ISOContext;
 
 - (void)updateThumbnailFromPhotoLibrary
 {
-    PHFetchOptions *fetchOptions = [PHFetchOptions new];
-    fetchOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO]];
-    PHFetchResult *fetchResult = [PHAsset fetchAssetsWithOptions:fetchOptions];
-    PHAsset *firstAsset = [fetchResult firstObject];
-    PHImageRequestOptions *imageRequestOptions = [PHImageRequestOptions new];
-    [imageRequestOptions setResizeMode:PHImageRequestOptionsResizeModeFast];
-    [imageRequestOptions setDeliveryMode:PHImageRequestOptionsDeliveryModeOpportunistic];
-    [[PHImageManager defaultManager] requestImageForAsset:firstAsset targetSize:self.thumbnailImageView.frame.size contentMode:PHImageContentModeAspectFill options:imageRequestOptions resultHandler:^(UIImage *result, NSDictionary *info) {
-        [self.thumbnailImageView setImage:result];
-    }];
+    [self.thumbnailImageView setImage:[[[FHCPhotoManager defaultManager] cameraRoll] firstObject]];
 }
 
 #pragma mark - Touches
@@ -461,6 +466,7 @@ static void *ISOContext = &ISOContext;
         [UIView animateWithDuration:0.2f
                          animations:^{
                              self.focusSlider.alpha = self.focusLocked?0.75f:1.0f;
+                             self.focusControl.alpha = self.focusLocked?0.0f:1.0f;
                          }];
         
         [UIView transitionWithView:self.lockIcon
@@ -679,15 +685,25 @@ static void *ISOContext = &ISOContext;
 - (void)focusSliderDidChange:(id)sender
 {
     NSError *error = nil;
-    
-    if ( [self.videoDevice lockForConfiguration:&error])
-    {
+    if ( [self.videoDevice lockForConfiguration:&error]) {
         [self.videoDevice setFocusModeLockedWithLensPosition:self.focusSlider.value completionHandler:nil];
         [self.videoDevice unlockForConfiguration];
         [self setFocusLocked:YES];
     }
-    else
-    {
+    else {
+        NSLog(@"%@", error);
+    }
+}
+
+- (void)focusControlDidChange:(id)sender
+{
+    NSError *error = nil;
+    if ( [self.videoDevice lockForConfiguration:&error]) {
+        [self.videoDevice setFocusModeLockedWithLensPosition:self.focusControl.value completionHandler:nil];
+        [self.videoDevice unlockForConfiguration];
+        [self setFocusLocked:YES];
+    }
+    else {
         NSLog(@"%@", error);
     }
 }
@@ -954,9 +970,7 @@ static void *ISOContext = &ISOContext;
 }
 
 #pragma mark - Transplanted Camera Methods
-- (void)addObservers {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationChanged) name:UIDeviceOrientationDidChangeNotification object:nil];
-    
+- (void)addCameraObservers {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
     
@@ -984,7 +998,7 @@ static void *ISOContext = &ISOContext;
     }]];
 }
 
-- (void)removeObservers {
+- (void)removeCameraObservers {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVCaptureDeviceSubjectAreaDidChangeNotification object:[self videoDevice]];
     [[NSNotificationCenter defaultCenter] removeObserver:[self runtimeErrorHandlingObserver]];
@@ -1038,6 +1052,9 @@ static void *ISOContext = &ISOContext;
         } /* else {
             NSLog(@"lens moved but slider is tracking");
         } */
+        if ( self.focusControl.rotationRecognizer.state == UIGestureRecognizerStatePossible ) {
+            self.focusControl.value = newLensPosition;
+        }
     }
     else if (context == CapturingStillImageContext) {
         BOOL isCapturingStillImage = [change[NSKeyValueChangeNewKey] boolValue];

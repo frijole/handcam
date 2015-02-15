@@ -12,8 +12,10 @@
 
 @interface FHCPhotosViewController : UIViewController
 
-@property (nonatomic, strong) IBOutlet PhotoView *currentCard;
-@property (nonatomic, strong) IBOutlet PhotoView *nextCard;
+@property (nonatomic) NSInteger currentIndex; // which photo are we showing?
+
+@property (nonatomic, strong) IBOutlet PhotoView *currentPhoto;
+@property (nonatomic, strong) IBOutlet PhotoView *nextPhoto;
 
 @property (nonatomic, weak) IBOutlet UIButton *shareButton;
 

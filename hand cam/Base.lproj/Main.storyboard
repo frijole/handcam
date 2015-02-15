@@ -67,10 +67,9 @@
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="fDW-5N-9jW" firstAttribute="leading" secondItem="JSS-GL-Pfo" secondAttribute="leading" constant="9" id="4kk-sl-r90"/>
+                                            <constraint firstItem="fDW-5N-9jW" firstAttribute="leading" secondItem="JSS-GL-Pfo" secondAttribute="leading" constant="9" id="6BE-FQ-NBF"/>
                                             <constraint firstAttribute="centerY" secondItem="fDW-5N-9jW" secondAttribute="centerY" constant="1" id="7SP-ZR-zxC"/>
                                             <constraint firstAttribute="height" constant="64" id="9LO-XL-St9"/>
-                                            <constraint firstAttribute="trailing" secondItem="fDW-5N-9jW" secondAttribute="trailing" constant="23" id="wFl-FQ-KqG"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uOT-Nf-ScK">
@@ -151,7 +150,6 @@
                                         <constraints>
                                             <constraint firstAttribute="centerY" secondItem="bHg-mq-yju" secondAttribute="centerY" constant="1" id="A9b-oW-Ohl"/>
                                             <constraint firstAttribute="trailing" secondItem="bHg-mq-yju" secondAttribute="trailing" constant="10" id="cW7-qi-ohE"/>
-                                            <constraint firstItem="bHg-mq-yju" firstAttribute="leading" secondItem="krK-AC-OcJ" secondAttribute="leading" constant="22" id="gfo-hb-7KY"/>
                                             <constraint firstAttribute="height" constant="64" id="kVu-T1-RGX"/>
                                         </constraints>
                                     </view>
@@ -168,6 +166,7 @@
                                     <constraint firstItem="JSS-GL-Pfo" firstAttribute="leading" secondItem="ZPw-5Z-FvP" secondAttribute="leading" id="eGi-t8-p9Z"/>
                                     <constraint firstItem="uOT-Nf-ScK" firstAttribute="leading" secondItem="JSS-GL-Pfo" secondAttribute="trailing" id="ejC-m5-dlf"/>
                                     <constraint firstItem="JSS-GL-Pfo" firstAttribute="centerY" secondItem="ZPw-5Z-FvP" secondAttribute="centerY" id="hth-Kx-xQd"/>
+                                    <constraint firstItem="krK-AC-OcJ" firstAttribute="leading" secondItem="uOT-Nf-ScK" secondAttribute="trailing" constant="-1" id="xTw-cd-3mv"/>
                                 </constraints>
                             </view>
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="spC-of-hEo" userLabel="Viewfinder Frame">
@@ -424,7 +423,7 @@
                                     <constraint firstAttribute="trailing" secondItem="KRm-ll-G5f" secondAttribute="trailing" id="vPg-lx-InM"/>
                                 </constraints>
                             </view>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hmu-8h-QIK" userLabel="Focus Container">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hmu-8h-QIK" userLabel="Old Focus Container">
                                 <rect key="frame" x="0.0" y="370" width="320" height="44"/>
                                 <subviews>
                                     <slider opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="sgy-bm-8UE">
@@ -470,9 +469,29 @@
                                     <constraint firstItem="uFn-Sw-dcR" firstAttribute="leading" secondItem="sgy-bm-8UE" secondAttribute="trailing" constant="10" id="rZA-m5-gjK"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="msS-o4-aAn" userLabel="New Focus Container">
+                                <rect key="frame" x="0.0" y="124" width="320" height="320"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zgp-Dl-NPV" customClass="FHCFocusControl">
+                                        <rect key="frame" x="30" y="30" width="260" height="260"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <action selector="focusControlDidChange:" destination="vXZ-lx-hvc" eventType="valueChanged" id="px2-gP-bCn"/>
+                                        </connections>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="zgp-Dl-NPV" secondAttribute="bottom" constant="30" id="2AJ-oL-rSk"/>
+                                    <constraint firstItem="zgp-Dl-NPV" firstAttribute="top" secondItem="msS-o4-aAn" secondAttribute="top" constant="30" id="5Dp-ih-6Os"/>
+                                    <constraint firstAttribute="trailing" secondItem="zgp-Dl-NPV" secondAttribute="trailing" constant="30" id="Kgr-kf-nbF"/>
+                                    <constraint firstItem="zgp-Dl-NPV" firstAttribute="leading" secondItem="msS-o4-aAn" secondAttribute="leading" constant="30" id="dM2-Z3-tDj"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="msS-o4-aAn" firstAttribute="bottom" secondItem="spC-of-hEo" secondAttribute="bottom" id="06K-zi-agO"/>
                             <constraint firstItem="G0I-0J-dyD" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="0cI-wd-tgo"/>
                             <constraint firstAttribute="trailing" secondItem="ZPw-5Z-FvP" secondAttribute="trailing" id="82R-dl-qAY"/>
                             <constraint firstAttribute="trailing" secondItem="NtF-7Z-G5O" secondAttribute="trailing" id="91q-vs-e8G"/>
@@ -482,14 +501,17 @@
                             <constraint firstItem="ZPw-5Z-FvP" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="LzK-ny-dey"/>
                             <constraint firstItem="ZPw-5Z-FvP" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="OKb-9R-y6l"/>
                             <constraint firstItem="NtF-7Z-G5O" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="RGP-HQ-SwR"/>
+                            <constraint firstItem="msS-o4-aAn" firstAttribute="leading" secondItem="spC-of-hEo" secondAttribute="leading" id="TAD-Q4-kcl"/>
                             <constraint firstItem="NtF-7Z-G5O" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="TZV-Jh-Tkv"/>
                             <constraint firstItem="hmu-8h-QIK" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="Udc-8Z-ol4"/>
+                            <constraint firstItem="msS-o4-aAn" firstAttribute="top" secondItem="spC-of-hEo" secondAttribute="top" id="WJy-Dh-qRg"/>
                             <constraint firstItem="NtF-7Z-G5O" firstAttribute="trailing" secondItem="spC-of-hEo" secondAttribute="trailing" id="ZHF-YD-rck"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="G0I-0J-dyD" secondAttribute="bottom" id="bOZ-CL-8at"/>
                             <constraint firstItem="G0I-0J-dyD" firstAttribute="top" secondItem="spC-of-hEo" secondAttribute="bottom" id="fe7-E4-SwQ"/>
                             <constraint firstItem="hmu-8h-QIK" firstAttribute="bottom" secondItem="spC-of-hEo" secondAttribute="bottom" constant="-30" id="hWt-zs-ZZw"/>
                             <constraint firstAttribute="trailing" secondItem="G0I-0J-dyD" secondAttribute="trailing" id="ojz-qH-EH3"/>
                             <constraint firstAttribute="trailing" secondItem="hmu-8h-QIK" secondAttribute="trailing" id="pXr-ME-hnd"/>
+                            <constraint firstItem="msS-o4-aAn" firstAttribute="trailing" secondItem="spC-of-hEo" secondAttribute="trailing" id="pm3-bn-ezQ"/>
                             <constraint firstItem="spC-of-hEo" firstAttribute="top" secondItem="ZPw-5Z-FvP" secondAttribute="bottom" id="tON-GJ-XKp"/>
                             <constraint firstAttribute="centerY" secondItem="spC-of-hEo" secondAttribute="centerY" id="xb2-sL-ivI"/>
                         </constraints>
@@ -500,6 +522,7 @@
                         <outlet property="bottomPoint" destination="Qtr-E2-v66" id="9qM-aB-WQ8"/>
                         <outlet property="distanceButton" destination="uFn-Sw-dcR" id="tTg-Q6-yuO"/>
                         <outlet property="focusContainer" destination="hmu-8h-QIK" id="nUW-tb-ahP"/>
+                        <outlet property="focusControl" destination="zgp-Dl-NPV" id="t5V-wE-76q"/>
                         <outlet property="focusLockView" destination="Qt8-GU-s4I" id="E7O-KI-Dwe"/>
                         <outlet property="focusSlider" destination="sgy-bm-8UE" id="oi5-1U-hQd"/>
                         <outlet property="isoContainer" destination="fDW-5N-9jW" id="Hbc-gY-O3c"/>
@@ -640,8 +663,8 @@
                     <nil key="simulatedStatusBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
-                        <outlet property="currentCard" destination="Pv1-PJ-lR7" id="fXi-BP-ju8"/>
-                        <outlet property="nextCard" destination="QWg-qc-PRi" id="sfB-Ai-7sw"/>
+                        <outlet property="currentPhoto" destination="Pv1-PJ-lR7" id="MCo-Hc-qMJ"/>
+                        <outlet property="nextPhoto" destination="QWg-qc-PRi" id="ms2-0J-3ZG"/>
                         <outlet property="shareButton" destination="TGs-QZ-hm0" id="2xQ-X2-y5B"/>
                     </connections>
                 </viewController>

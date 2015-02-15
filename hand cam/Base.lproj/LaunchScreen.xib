@@ -1,145 +1,144 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="14A361c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2yh-f5-Rd6">
-                    <rect key="frame" x="0.0" y="0.0" width="600" height="45"/>
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="124"/>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="x7R-0o-l0y"/>
                     </constraints>
                 </view>
                 <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jwE-n2-W1e">
-                    <rect key="frame" x="79" y="45" width="443" height="443"/>
+                    <rect key="frame" x="0.0" y="124" width="320" height="320"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="viewfinderMask" translatesAutoresizingMaskIntoConstraints="NO" id="f5k-yD-HcC">
-                            <rect key="frame" x="0.0" y="0.0" width="443" height="443"/>
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="320"/>
                             <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jZJ-o5-zlE">
-                            <rect key="frame" x="0.0" y="0.0" width="10" height="137"/>
+                            <rect key="frame" x="0.0" y="0.0" width="10" height="96"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="10" id="FXy-ng-t8U"/>
                             </constraints>
                         </view>
                         <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="center" image="point-right" translatesAutoresizingMaskIntoConstraints="NO" id="8xz-gu-Llo">
-                            <rect key="frame" x="2" y="137" width="8" height="16"/>
+                            <rect key="frame" x="2" y="96" width="8" height="16"/>
                             <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1am-b8-AjR">
-                            <rect key="frame" x="0.0" y="153" width="10" height="137"/>
+                            <rect key="frame" x="0.0" y="112" width="10" height="96"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="10" id="jpG-4m-hbX"/>
                             </constraints>
                         </view>
                         <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="center" image="point-right" translatesAutoresizingMaskIntoConstraints="NO" id="tE8-Wh-fMl">
-                            <rect key="frame" x="2" y="290" width="8" height="16"/>
+                            <rect key="frame" x="2" y="208" width="8" height="16"/>
                             <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wOP-sh-Al1">
-                            <rect key="frame" x="0.0" y="306" width="10" height="137"/>
+                            <rect key="frame" x="0.0" y="224" width="10" height="96"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="10" id="RrX-m9-Lq6"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JJL-Ir-8Sc">
-                            <rect key="frame" x="431" y="0.0" width="10" height="137"/>
+                            <rect key="frame" x="308" y="0.0" width="10" height="96"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="10" id="tBs-6c-1mB"/>
                             </constraints>
                         </view>
                         <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="center" image="point-left" translatesAutoresizingMaskIntoConstraints="NO" id="2Nb-eC-ofn">
-                            <rect key="frame" x="433" y="137" width="8" height="16"/>
+                            <rect key="frame" x="310" y="96" width="8" height="16"/>
                             <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="60c-1X-w8r">
-                            <rect key="frame" x="431" y="153" width="10" height="137"/>
+                            <rect key="frame" x="308" y="112" width="10" height="96"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="10" id="XiN-rh-sxn"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hQ5-zn-kSz">
-                            <rect key="frame" x="431" y="306" width="10" height="137"/>
+                            <rect key="frame" x="308" y="224" width="10" height="96"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="10" id="cfJ-Vl-t61"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WKu-nk-qvK">
-                            <rect key="frame" x="0.0" y="0.0" width="137" height="10"/>
+                            <rect key="frame" x="0.0" y="0.0" width="96" height="10"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="10" id="5lK-VY-kew"/>
                             </constraints>
                         </view>
                         <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="center" image="point-down" translatesAutoresizingMaskIntoConstraints="NO" id="UhM-aM-Jno">
-                            <rect key="frame" x="137" y="2" width="16" height="8"/>
+                            <rect key="frame" x="96" y="2" width="16" height="8"/>
                             <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9fe-8Z-1ME">
-                            <rect key="frame" x="153" y="0.0" width="137" height="10"/>
+                            <rect key="frame" x="112" y="0.0" width="96" height="10"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="10" id="vpV-D1-b4A"/>
                             </constraints>
                         </view>
                         <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="center" image="point-down" translatesAutoresizingMaskIntoConstraints="NO" id="d2i-XP-kOq">
-                            <rect key="frame" x="290" y="0.0" width="16" height="8"/>
+                            <rect key="frame" x="208" y="0.0" width="16" height="8"/>
                             <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zU7-cW-kSI">
-                            <rect key="frame" x="306" y="0.0" width="137" height="10"/>
+                            <rect key="frame" x="224" y="0.0" width="96" height="10"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="10" id="7XB-ka-BaW"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y7M-hH-Qlp">
-                            <rect key="frame" x="0.0" y="431" width="137" height="10"/>
+                            <rect key="frame" x="0.0" y="308" width="96" height="10"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="10" id="S9f-AN-vL5"/>
                             </constraints>
                         </view>
                         <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="center" image="point-up" translatesAutoresizingMaskIntoConstraints="NO" id="v24-ux-gDB">
-                            <rect key="frame" x="137" y="433" width="16" height="8"/>
+                            <rect key="frame" x="96" y="310" width="16" height="8"/>
                             <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3o4-Xx-RTN">
-                            <rect key="frame" x="305" y="431" width="137" height="10"/>
+                            <rect key="frame" x="223" y="308" width="96" height="10"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="10" id="KVv-3y-8Sy"/>
                             </constraints>
                         </view>
                         <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="center" image="point-up" translatesAutoresizingMaskIntoConstraints="NO" id="DFi-Be-djh">
-                            <rect key="frame" x="289" y="433" width="16" height="8"/>
+                            <rect key="frame" x="207" y="310" width="16" height="8"/>
                             <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="deo-8K-VGq">
-                            <rect key="frame" x="153" y="431" width="136" height="10"/>
+                            <rect key="frame" x="112" y="308" width="95" height="10"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="10" id="sHB-L5-rCN"/>
                             </constraints>
                         </view>
                         <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="center" image="point-left" translatesAutoresizingMaskIntoConstraints="NO" id="5bx-r2-3f7">
-                            <rect key="frame" x="433" y="290" width="8" height="16"/>
+                            <rect key="frame" x="310" y="208" width="8" height="16"/>
                             <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         </imageView>
                     </subviews>
@@ -213,27 +212,19 @@
                     </variation>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Asn-Aw-JyI">
-                    <rect key="frame" x="0.0" y="488" width="600" height="112"/>
+                    <rect key="frame" x="0.0" y="444" width="320" height="124"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XQb-rW-aek">
-                            <rect key="frame" x="0.0" y="0.0" width="600" height="45"/>
-                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                        </view>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ceA-P8-dTm">
-                            <rect key="frame" x="0.0" y="45" width="600" height="67"/>
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="124"/>
                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         </view>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstItem="ceA-P8-dTm" firstAttribute="leading" secondItem="Asn-Aw-JyI" secondAttribute="leading" id="3w7-SV-FVD"/>
-                        <constraint firstAttribute="bottom" secondItem="ceA-P8-dTm" secondAttribute="bottom" id="Bno-zE-MDB"/>
                         <constraint firstAttribute="trailing" secondItem="XQb-rW-aek" secondAttribute="trailing" id="N6P-hf-Kbt"/>
                         <constraint firstItem="XQb-rW-aek" firstAttribute="top" secondItem="Asn-Aw-JyI" secondAttribute="top" id="aMe-b3-lTN"/>
-                        <constraint firstAttribute="trailing" secondItem="ceA-P8-dTm" secondAttribute="trailing" id="ahD-nI-Y1R"/>
+                        <constraint firstAttribute="bottom" secondItem="XQb-rW-aek" secondAttribute="bottom" id="aXF-O6-Dsf"/>
                         <constraint firstItem="XQb-rW-aek" firstAttribute="leading" secondItem="Asn-Aw-JyI" secondAttribute="leading" id="joQ-1X-XNG"/>
-                        <constraint firstItem="XQb-rW-aek" firstAttribute="height" secondItem="ceA-P8-dTm" secondAttribute="height" multiplier="2:3" id="n2a-QG-fId"/>
-                        <constraint firstItem="ceA-P8-dTm" firstAttribute="top" secondItem="XQb-rW-aek" secondAttribute="bottom" id="xsg-RG-EhT"/>
                     </constraints>
                 </view>
             </subviews>
@@ -253,7 +244,7 @@
                 <constraint firstAttribute="centerX" secondItem="jwE-n2-W1e" secondAttribute="centerX" id="pX9-ZO-HV6"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
-            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
             <point key="canvasLocation" x="528" y="410"/>
         </view>
     </objects>

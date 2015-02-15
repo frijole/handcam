@@ -11,6 +11,7 @@
 #import "AAPLPreviewView.h"
 
 #import "FHCShutterButton.h"
+#import "FHCFocusControl.h"
 
 @interface FHCCameraViewController : UIViewController
 
@@ -40,6 +41,9 @@
 
 @property (nonatomic, weak) IBOutlet UISlider *focusSlider;
 - (IBAction)focusSliderDidChange:(id)sender;
+
+@property (nonatomic, weak) IBOutlet FHCFocusControl *focusControl;
+- (IBAction)focusControlDidChange:(id)sender;
 
 @property (nonatomic, weak) IBOutlet UIButton *macroButton;
 @property (nonatomic, strong) NSTimer *macroTimer;

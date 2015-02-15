@@ -9,6 +9,7 @@
 #import "FHCPhotosViewController.h"
 
 #import <Photos/Photos.h>
+#import "FHCPhotoManager.h"
 
 @interface FHCPhotosViewController ()
 
@@ -24,13 +25,13 @@
     [super viewDidLoad];
     
     // one-time nib cleanup of the next card
-    if ( self.nextCard ) {
-        [self.nextCard setTransform:CGAffineTransformMakeScale(0.95f, 0.95f)];
+    if ( self.nextPhoto ) {
+        [self.nextPhoto setTransform:CGAffineTransformMakeScale(0.95f, 0.95f)];
     }
 
     // general prep
-    [self prepareCurrentCard];
-    [self prepareNextCard];
+    [self prepareCurrentPhoto];
+    [self prepareNextPhoto];
 
     // ooh shiny
     self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
@@ -41,70 +42,89 @@
     return NO;
 }
 
-- (void)presentNextCard
+- (void)presentNextPhoto
 {
+    if ( !self.nextPhoto ) {
+        // time to die
+        [self dismissViewControllerAnimated:YES completion:nil];
+        return;
+    }
+    
     [UIView animateWithDuration:0.2f
                      animations:^{
                          // bump it up
-                         [self.nextCard setBackgroundColor:[UIColor whiteColor]];
-                         [self.nextCard setTransform:CGAffineTransformIdentity];
+                         [self.nextPhoto setBackgroundColor:[UIColor whiteColor]];
+                         [self.nextPhoto setAlpha:1.0F];
+                         [self.nextPhoto setTransform:CGAffineTransformIdentity];
                          
                          // shuffle things around
-                         [self setCurrentCard:self.nextCard];
-                         [self setNextCard:nil];
+                         [self setCurrentPhoto:self.nextPhoto];
+                         [self setNextPhoto:nil];
                          
-                         // stash the current strategy
-                         [[NSUserDefaults standardUserDefaults] setObject:self.currentCard.label.text forKey:@"lastStrategy"];
+                         // increment the index
+                         [self setCurrentIndex:self.currentIndex+1];
                          
                          // and reset
-                         [self prepareCurrentCard];
-                         [self prepareNextCard];
+                         [self prepareCurrentPhoto];
+                         [self prepareNextPhoto];
                      }];
 }
 
-- (void)prepareCurrentCard
+- (void)prepareCurrentPhoto
 {
-    if ( !self.currentCard ) {
+    if ( !self.currentPhoto ) {
         // TODD: create current card if necessary
-        [self setCurrentCard:[PhotoView new]];
-        [self.currentCard setAutoresizingMask:UIViewAutoresizingNone];
-        [self.currentCard setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [self.view addSubview:self.currentCard];
-        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.currentCard attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0f constant:-20.0f]];
-        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.currentCard attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.currentCard attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0.0f]];
-        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.currentCard attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:0.0f]];
-        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.currentCard attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f]];
+        [self setCurrentPhoto:[PhotoView new]];
+        [self.currentPhoto setAutoresizingMask:UIViewAutoresizingNone];
+        [self.currentPhoto setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self.view addSubview:self.currentPhoto];
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.currentPhoto attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0f constant:-20.0f]];
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.currentPhoto attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.currentPhoto attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0.0f]];
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.currentPhoto attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:0.0f]];
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.currentPhoto attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f]];
     }
     
     // TODO: prepare current photo!
+    if ( self.currentIndex < [[FHCPhotoManager defaultManager] cameraRoll].count ) {
+        [self.currentPhoto.imageView setImage:[[[FHCPhotoManager defaultManager] cameraRoll] objectAtIndex:self.currentIndex]];
+    } else {
+        NSLog(@"no image to display?!");
+    }
     
     if ( self.currentPhotoPanRecognizer.view ) {
         [self.currentPhotoPanRecognizer.view removeGestureRecognizer:self.currentPhotoPanRecognizer];
     }
     
-    [self.currentCard setGestureRecognizers:@[self.currentPhotoPanRecognizer]];
+    [self.currentPhoto setGestureRecognizers:@[self.currentPhotoPanRecognizer]];
 }
 
-- (void)prepareNextCard
+- (void)prepareNextPhoto
 {
-    if ( !self.nextCard ) {
-        // create next card if necessary
-        [self setNextCard:[PhotoView new]];
-        [self.nextCard setBackgroundColor:[UIColor whiteColor]];
-        [self.nextCard setAutoresizingMask:UIViewAutoresizingNone];
-        [self.nextCard setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [self.view insertSubview:self.nextCard belowSubview:self.currentCard];
-        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nextCard attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0f constant:-20.0f]];
-        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nextCard attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.nextCard attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0.0f]];
-        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nextCard attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:0.0f]];
-        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nextCard attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f]];
+    if ( self.currentIndex+1 >= [[[FHCPhotoManager defaultManager] cameraRoll] count] ) {
+        // TODO: do something better to indicate the end
+        return;
     }
 
-    // TODO: update photo on card!
+    if ( !self.nextPhoto ) {
+        // create next card if necessary
+        [self setNextPhoto:[PhotoView new]];
+        [self.nextPhoto setBackgroundColor:[UIColor whiteColor]];
+        [self.nextPhoto setAutoresizingMask:UIViewAutoresizingNone];
+        [self.nextPhoto setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self.view insertSubview:self.nextPhoto belowSubview:self.currentPhoto];
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nextPhoto attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0f constant:-20.0f]];
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nextPhoto attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.nextPhoto attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0.0f]];
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nextPhoto attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:0.0f]];
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nextPhoto attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f]];
+    }
+
+    // update photo on card
+    UIImage *tmpImage = [[[FHCPhotoManager defaultManager] cameraRoll] objectAtIndex:self.currentIndex+1];
+    [self.nextPhoto.imageView setImage:tmpImage];
     
     [UIView performWithoutAnimation:^{
-        [self.nextCard setAlpha:0.75f];
-        [self.nextCard setTransform:CGAffineTransformMakeScale(0.95f, 0.95f)];
+        [self.nextPhoto setAlpha:0.75f];
+        [self.nextPhoto setTransform:CGAffineTransformMakeScale(0.95f, 0.95f)];
         [self.view layoutIfNeeded];
     }];
 }
@@ -176,8 +196,8 @@
         CGPoint anchor = [gesture locationInView:gesture.view.superview];
         attachment.anchorPoint = anchor;
         
-        CGFloat tmpXTranslation = fabsf(self.currentCard.center.x - startCenter.x);
-        CGFloat tmpYTranslation = fabsf(self.currentCard.center.y - startCenter.y);
+        CGFloat tmpXTranslation = fabsf(self.currentPhoto.center.x - startCenter.x);
+        CGFloat tmpYTranslation = fabsf(self.currentPhoto.center.y - startCenter.y);
         
         CGFloat tmpLabelAlpha = 1.0f;
         if ( tmpXTranslation < 50.0f && tmpYTranslation < 50.0f ) { // velocity.x < 100.0f && velocity.y < 100.0f ) {
@@ -186,12 +206,12 @@
             tmpLabelAlpha = 0.25f;
         }
         
-        if ( self.currentCard.label.alpha != tmpLabelAlpha ) {
+        if ( self.currentPhoto.label.alpha != tmpLabelAlpha ) {
             [UIView animateWithDuration:0.2f
                                   delay:0.0f
                                 options:UIViewAnimationOptionCurveEaseOut
                              animations:^{
-                                 [self.currentCard.label setAlpha:tmpLabelAlpha];
+                                 [self.currentPhoto.label setAlpha:tmpLabelAlpha];
                              }
                              completion:nil];
             
@@ -206,8 +226,8 @@
         // NSLog(@"current card's position: %@", NSStringFromCGRect(self.currentCard.frame));
         // NSLog(@"current card's visible rect: %@", NSStringFromCGRect(CGRectIntersection([self.view bounds], [self.currentCard frame])));
         
-        CGFloat tmpXTranslation = fabsf(self.currentCard.center.x - startCenter.x);
-        CGFloat tmpYTranslation = fabsf(self.currentCard.center.y - startCenter.y);
+        CGFloat tmpXTranslation = fabsf(self.currentPhoto.center.x - startCenter.x);
+        CGFloat tmpYTranslation = fabsf(self.currentPhoto.center.y - startCenter.y);
         
         if ( tmpXTranslation < 50.0f && tmpYTranslation < 50.0f ) { // velocity.x < 100.0f && velocity.y < 100.0f ) {
             UISnapBehavior *snap = [[UISnapBehavior alloc] initWithItem:gesture.view snapToPoint:startCenter];
@@ -240,7 +260,7 @@
                 [self.animator removeAllBehaviors];
                 [gesture.view removeFromSuperview];
                 
-                [self presentNextCard];
+                [self presentNextPhoto];
             }
         };
 
@@ -267,7 +287,7 @@
 
 - (void)shareButtonPressed:(id)sender
 {
-    NSArray *tmpActivityItems = @[self.currentCard.label.text, self.currentCard.imageView.image];
+    NSArray *tmpActivityItems = @[self.currentPhoto.label.text, self.currentPhoto.imageView.image];
     UIActivityViewController *tmpActivityViewController = [[UIActivityViewController alloc] initWithActivityItems:tmpActivityItems applicationActivities:nil];
     [self presentViewController:tmpActivityViewController animated:YES completion:nil];
 }

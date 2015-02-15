@@ -22,6 +22,8 @@
 		3CE961DB19D6DB56007CA04A /* FHCFocusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CE961DA19D6DB56007CA04A /* FHCFocusView.m */; };
 		3CE961DE19D6E4F2007CA04A /* UIView+Blur.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CE961DD19D6E4F2007CA04A /* UIView+Blur.m */; };
 		3CF7D5561A8BD63000F7B78E /* FHCPhotosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF7D5551A8BD63000F7B78E /* FHCPhotosViewController.m */; };
+		3CFEE4D81A8F82EA005C85C5 /* FHCPhotoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CFEE4D71A8F82EA005C85C5 /* FHCPhotoManager.m */; };
+		3CFEE4DB1A8F94BB005C85C5 /* FHCFocusControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CFEE4DA1A8F94BB005C85C5 /* FHCFocusControl.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +65,10 @@
 		3CE961DD19D6E4F2007CA04A /* UIView+Blur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Blur.m"; sourceTree = "<group>"; };
 		3CF7D5541A8BD63000F7B78E /* FHCPhotosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHCPhotosViewController.h; sourceTree = "<group>"; };
 		3CF7D5551A8BD63000F7B78E /* FHCPhotosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHCPhotosViewController.m; sourceTree = "<group>"; };
+		3CFEE4D61A8F82EA005C85C5 /* FHCPhotoManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FHCPhotoManager.h; path = Data/FHCPhotoManager.h; sourceTree = "<group>"; };
+		3CFEE4D71A8F82EA005C85C5 /* FHCPhotoManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FHCPhotoManager.m; path = Data/FHCPhotoManager.m; sourceTree = "<group>"; };
+		3CFEE4D91A8F94BB005C85C5 /* FHCFocusControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHCFocusControl.h; sourceTree = "<group>"; };
+		3CFEE4DA1A8F94BB005C85C5 /* FHCFocusControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHCFocusControl.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +115,7 @@
 				3C99B93A19CE2AB900A70C94 /* FHCAppDelegate.h */,
 				3C99B93B19CE2AB900A70C94 /* FHCAppDelegate.m */,
 				3C99B94019CE2AB900A70C94 /* Main.storyboard */,
+				3CFEE4D51A8F82CF005C85C5 /* Data */,
 				3CFEE4D41A8F7679005C85C5 /* View Controllers */,
 				3C99B96B19CF692E00A70C94 /* Views, Categories, etc.  */,
 				3C99B93619CE2AB900A70C94 /* Supporting Files */,
@@ -153,6 +160,8 @@
 				3C99B96619CF4A3D00A70C94 /* FHCShutterButton.m */,
 				3CE961D919D6DB56007CA04A /* FHCFocusView.h */,
 				3CE961DA19D6DB56007CA04A /* FHCFocusView.m */,
+				3CFEE4D91A8F94BB005C85C5 /* FHCFocusControl.h */,
+				3CFEE4DA1A8F94BB005C85C5 /* FHCFocusControl.m */,
 				3C99B96219CF485B00A70C94 /* UILabel+Shake.h */,
 				3C99B96319CF485B00A70C94 /* UILabel+Shake.m */,
 				3CE961DC19D6E4F2007CA04A /* UIView+Blur.h */,
@@ -181,6 +190,15 @@
 				3CF7D5551A8BD63000F7B78E /* FHCPhotosViewController.m */,
 			);
 			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		3CFEE4D51A8F82CF005C85C5 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				3CFEE4D61A8F82EA005C85C5 /* FHCPhotoManager.h */,
+				3CFEE4D71A8F82EA005C85C5 /* FHCPhotoManager.m */,
+			);
+			name = Data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -295,6 +313,8 @@
 				3C99B93919CE2AB900A70C94 /* main.m in Sources */,
 				3C99B96119CF3ADB00A70C94 /* AAPLPreviewView.m in Sources */,
 				3C99B96719CF4A3D00A70C94 /* FHCShutterButton.m in Sources */,
+				3CFEE4DB1A8F94BB005C85C5 /* FHCFocusControl.m in Sources */,
+				3CFEE4D81A8F82EA005C85C5 /* FHCPhotoManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
