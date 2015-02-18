@@ -39,7 +39,7 @@
 
 - (BOOL)prefersStatusBarHidden
 {
-    return NO;
+    return YES;
 }
 
 - (void)presentNextPhoto
@@ -112,10 +112,10 @@
         [self.nextPhoto setAutoresizingMask:UIViewAutoresizingNone];
         [self.nextPhoto setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.view insertSubview:self.nextPhoto belowSubview:self.currentPhoto];
-        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nextPhoto attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0f constant:-20.0f]];
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nextPhoto attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.photoContainer attribute:NSLayoutAttributeWidth multiplier:1.0f constant:-5.0f]];
         [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nextPhoto attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.nextPhoto attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0.0f]];
-        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nextPhoto attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:0.0f]];
-        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nextPhoto attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f]];
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nextPhoto attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.photoContainer attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:0.0f]];
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nextPhoto attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.photoContainer attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f]];
     }
 
     // update photo on card
@@ -280,7 +280,7 @@
     return atan2(view.transform.b, view.transform.a);
 }
 
-- (void)tapRecognizerPressed:(id)sender
+- (void)previewViewTapped:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }

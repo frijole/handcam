@@ -3,13 +3,12 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Camera View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController restorationIdentifier="viewControllerRestorationID" id="vXZ-lx-hvc" customClass="FHCCameraViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="cameraViewControllerStoryboardID" useStoryboardIdentifierAsRestorationIdentifier="YES" id="vXZ-lx-hvc" customClass="FHCCameraViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
@@ -472,7 +471,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="msS-o4-aAn" userLabel="New Focus Container">
                                 <rect key="frame" x="0.0" y="124" width="320" height="320"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zgp-Dl-NPV" customClass="FHCFocusControl">
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zgp-Dl-NPV" customClass="FHCFocusControl">
                                         <rect key="frame" x="30" y="30" width="260" height="260"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <connections>
@@ -547,55 +546,62 @@
                         <outlet property="thumbnailImageView" destination="t0b-Eg-Xyu" id="C9o-Fh-bJH"/>
                         <outlet property="topPoint" destination="Ylw-j6-AIT" id="8kv-oF-Qpj"/>
                         <outlet property="viewfinderFrame" destination="EZd-dU-nGQ" id="tmY-HI-tSb"/>
-                        <segue destination="Wo6-KZ-lzq" kind="custom" identifier="showPhotosSegue" id="Bbx-G4-P1K"/>
+                        <segue destination="Wo6-KZ-lzq" kind="presentation" identifier="showPhotosSegue" modalTransitionStyle="flipHorizontal" id="hGq-1r-uUp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
                 <swipeGestureRecognizer direction="up" id="DMA-cB-ahK" userLabel="Swipe Up Recognizer">
                     <connections>
                         <action selector="swipeUp:" destination="vXZ-lx-hvc" id="WwW-os-0jp"/>
+                        <outlet property="delegate" destination="vXZ-lx-hvc" id="hbr-nE-oY7"/>
                     </connections>
                 </swipeGestureRecognizer>
                 <swipeGestureRecognizer direction="down" id="hfC-XU-1bA" userLabel="Swipe Down Recognizer">
                     <connections>
                         <action selector="swipeDown:" destination="vXZ-lx-hvc" id="CbM-c2-Um6"/>
+                        <outlet property="delegate" destination="vXZ-lx-hvc" id="ldj-Ve-gkE"/>
                     </connections>
                 </swipeGestureRecognizer>
                 <swipeGestureRecognizer direction="left" id="B1x-GB-H1m" userLabel="Swipe Left Recognizer">
                     <connections>
                         <action selector="swipeLeft:" destination="vXZ-lx-hvc" id="pJ7-jc-oRt"/>
+                        <outlet property="delegate" destination="vXZ-lx-hvc" id="WmJ-sC-AdP"/>
                     </connections>
                 </swipeGestureRecognizer>
                 <swipeGestureRecognizer direction="right" id="JFy-rR-0y3" userLabel="Swipe Right Recognizer">
                     <connections>
                         <action selector="swipeRight:" destination="vXZ-lx-hvc" id="kOv-Da-eTw"/>
+                        <outlet property="delegate" destination="vXZ-lx-hvc" id="OXH-oh-rQS"/>
                     </connections>
                 </swipeGestureRecognizer>
-                <tapGestureRecognizer id="5xu-f9-Gng">
+                <tapGestureRecognizer id="5xu-f9-Gng" userLabel="Focus Tap Gesture Recognizer">
                     <connections>
                         <action selector="tapGestureRecognizerFired:" destination="vXZ-lx-hvc" id="f5V-Yw-hZe"/>
-                        <outlet property="delegate" destination="vXZ-lx-hvc" id="nuW-Jo-Jv5"/>
+                        <outlet property="delegate" destination="vXZ-lx-hvc" id="mui-9M-KMe"/>
                     </connections>
                 </tapGestureRecognizer>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="Ded-MT-w94" userLabel="Preview Long Press Recognizer">
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="Ded-MT-w94" userLabel="Focus Long Press Recognizer">
                     <connections>
                         <action selector="longPressGestureRecognizerFired:" destination="vXZ-lx-hvc" id="Mxr-Ed-tiO"/>
-                        <outlet property="delegate" destination="vXZ-lx-hvc" id="ol8-Pt-c80"/>
+                        <outlet property="delegate" destination="vXZ-lx-hvc" id="seT-BC-RyO"/>
                     </connections>
                 </pongPressGestureRecognizer>
                 <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="936-8I-o4O" userLabel="Macro Long Press Recognizer">
                     <connections>
                         <action selector="macroButtonHeld:" destination="vXZ-lx-hvc" id="1Fd-fn-RHE"/>
+                        <outlet property="delegate" destination="vXZ-lx-hvc" id="53b-Jh-tkD"/>
                     </connections>
                 </pongPressGestureRecognizer>
                 <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="NvN-fg-jeQ" userLabel="Distance Long Press Recognizer">
                     <connections>
                         <action selector="distanceButtonHeld:" destination="vXZ-lx-hvc" id="XiR-IT-TBf"/>
+                        <outlet property="delegate" destination="vXZ-lx-hvc" id="DQY-SO-jvA"/>
                     </connections>
                 </pongPressGestureRecognizer>
                 <tapGestureRecognizer id="LUL-mC-TRu" userLabel="Thumbnail Tap Recognizer">
                     <connections>
                         <action selector="thumbnailTapped:" destination="vXZ-lx-hvc" id="UFJ-kn-HZO"/>
+                        <outlet property="delegate" destination="vXZ-lx-hvc" id="WQo-kL-YLZ"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
@@ -604,7 +610,7 @@
         <!--Photos View Controller-->
         <scene sceneID="Se5-7b-wpv">
             <objects>
-                <viewController id="Wo6-KZ-lzq" customClass="FHCPhotosViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="photoViewControllerStoryboardID" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Wo6-KZ-lzq" customClass="FHCPhotosViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="cw4-2k-YjX"/>
                         <viewControllerLayoutGuide type="bottom" id="ewd-bh-Gd0"/>
@@ -613,65 +619,115 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view alpha="0.74999999999999978" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QWg-qc-PRi" userLabel="Second Photo" customClass="PhotoView">
-                                <rect key="frame" x="10" y="134" width="300" height="300"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S7p-kW-YKj" userLabel="Header Container">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="125"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1SC-hr-ujP" userLabel="Photos Container">
+                                <rect key="frame" x="0.0" y="125" width="320" height="320"/>
+                                <subviews>
+                                    <view alpha="0.74999999999999978" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QWg-qc-PRi" userLabel="Second Photo" customClass="PhotoView">
+                                        <rect key="frame" x="5" y="5" width="310" height="310"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="QWg-qc-PRi" secondAttribute="height" id="s5v-Yh-Qp3"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pv1-PJ-lR7" userLabel="First Photo" customClass="PhotoView">
+                                        <rect key="frame" x="5" y="5" width="310" height="310"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="Pv1-PJ-lR7" secondAttribute="height" id="gPb-Fi-60N"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="QWg-qc-PRi" secondAttribute="height" id="s5v-Yh-Qp3"/>
+                                    <constraint firstItem="Pv1-PJ-lR7" firstAttribute="leading" secondItem="1SC-hr-ujP" secondAttribute="leading" constant="5" id="1B0-vY-wY7"/>
+                                    <constraint firstAttribute="centerX" secondItem="Pv1-PJ-lR7" secondAttribute="centerX" id="6l3-VJ-ZBy"/>
+                                    <constraint firstAttribute="centerY" secondItem="Pv1-PJ-lR7" secondAttribute="centerY" id="A3Z-CL-xfa"/>
+                                    <constraint firstAttribute="centerY" secondItem="QWg-qc-PRi" secondAttribute="centerY" id="P2b-yv-vYB"/>
+                                    <constraint firstItem="QWg-qc-PRi" firstAttribute="leading" secondItem="1SC-hr-ujP" secondAttribute="leading" constant="5" id="fC7-W3-7yc"/>
+                                    <constraint firstAttribute="centerX" secondItem="QWg-qc-PRi" secondAttribute="centerX" id="pKO-tQ-X8l"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pv1-PJ-lR7" userLabel="First Photo" customClass="PhotoView">
-                                <rect key="frame" x="10" y="134" width="300" height="300"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hPh-pg-dIx" userLabel="Footer Container">
+                                <rect key="frame" x="0.0" y="445" width="320" height="125"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGs-QZ-hm0">
+                                        <rect key="frame" x="266" y="40" width="44" height="44"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="Puj-Lg-wpP"/>
+                                            <constraint firstAttribute="width" constant="44" id="f8Z-tj-cM3"/>
+                                        </constraints>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <state key="normal" image="iconShare">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="selected" image="iconShareOn"/>
+                                        <state key="highlighted" image="iconShareOn"/>
+                                        <connections>
+                                            <action selector="shareButtonPressed:" destination="Wo6-KZ-lzq" eventType="touchUpInside" id="pbP-z0-irM"/>
+                                        </connections>
+                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dSm-VX-tbA">
+                                        <rect key="frame" x="15" y="39" width="45" height="45"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Z1S-5f-wt7" customClass="AAPLPreviewView">
+                                                <rect key="frame" x="1" y="1" width="43" height="43"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <gestureRecognizers/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="45" id="YyU-jz-WnH"/>
+                                            <constraint firstAttribute="width" constant="45" id="drI-Ca-tAl"/>
+                                        </constraints>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="rp2-Ju-B2v" appends="YES" id="0fz-no-wFa"/>
+                                        </connections>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="Pv1-PJ-lR7" secondAttribute="height" id="gPb-Fi-60N"/>
+                                    <constraint firstAttribute="centerY" secondItem="dSm-VX-tbA" secondAttribute="centerY" constant="1" id="1cM-tO-XTP"/>
+                                    <constraint firstAttribute="trailing" secondItem="TGs-QZ-hm0" secondAttribute="trailing" constant="10" id="8tk-qK-LGI"/>
+                                    <constraint firstItem="dSm-VX-tbA" firstAttribute="leading" secondItem="hPh-pg-dIx" secondAttribute="leading" constant="15" id="XVe-WB-6lr"/>
+                                    <constraint firstAttribute="centerY" secondItem="TGs-QZ-hm0" secondAttribute="centerY" id="yaH-5M-ATs"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGs-QZ-hm0">
-                                <rect key="frame" x="250" y="484" width="44" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="Puj-Lg-wpP"/>
-                                    <constraint firstAttribute="width" constant="44" id="f8Z-tj-cM3"/>
-                                </constraints>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <state key="normal" image="iconShare">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="selected" image="iconShareOn"/>
-                                <state key="highlighted" image="iconShareOn"/>
-                                <connections>
-                                    <action selector="shareButtonPressed:" destination="Wo6-KZ-lzq" eventType="touchUpInside" id="pbP-z0-irM"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstAttribute="centerX" secondItem="Pv1-PJ-lR7" secondAttribute="centerX" id="Jrq-d2-OBr"/>
-                            <constraint firstItem="QWg-qc-PRi" firstAttribute="width" secondItem="NlJ-9n-75c" secondAttribute="width" constant="-20" id="NWd-FQ-Bpz"/>
-                            <constraint firstItem="ewd-bh-Gd0" firstAttribute="top" secondItem="TGs-QZ-hm0" secondAttribute="bottom" constant="40" id="WC0-rU-eEq"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="TGs-QZ-hm0" secondAttribute="trailing" constant="10" id="apF-gM-r26"/>
-                            <constraint firstItem="Pv1-PJ-lR7" firstAttribute="width" secondItem="NlJ-9n-75c" secondAttribute="width" constant="-20" id="dhn-Xg-mOr"/>
-                            <constraint firstAttribute="centerY" secondItem="Pv1-PJ-lR7" secondAttribute="centerY" id="naj-8h-uDO"/>
-                            <constraint firstAttribute="centerX" secondItem="QWg-qc-PRi" secondAttribute="centerX" id="ohg-5N-Hvf"/>
-                            <constraint firstAttribute="centerY" secondItem="QWg-qc-PRi" secondAttribute="centerY" id="wdH-TL-x6c"/>
+                            <constraint firstItem="hPh-pg-dIx" firstAttribute="height" secondItem="S7p-kW-YKj" secondAttribute="height" id="05t-h0-da8"/>
+                            <constraint firstAttribute="trailing" secondItem="S7p-kW-YKj" secondAttribute="trailing" id="5W7-P8-sZN"/>
+                            <constraint firstAttribute="trailing" secondItem="hPh-pg-dIx" secondAttribute="trailing" id="G0o-WP-jcx"/>
+                            <constraint firstItem="1SC-hr-ujP" firstAttribute="leading" secondItem="NlJ-9n-75c" secondAttribute="leading" id="OMe-BX-14P"/>
+                            <constraint firstItem="S7p-kW-YKj" firstAttribute="leading" secondItem="NlJ-9n-75c" secondAttribute="leading" id="XAd-j5-GvI"/>
+                            <constraint firstItem="S7p-kW-YKj" firstAttribute="top" secondItem="cw4-2k-YjX" secondAttribute="bottom" id="Z4c-9a-mjX"/>
+                            <constraint firstItem="1SC-hr-ujP" firstAttribute="top" secondItem="S7p-kW-YKj" secondAttribute="bottom" id="dPj-JU-bma"/>
+                            <constraint firstItem="ewd-bh-Gd0" firstAttribute="top" secondItem="hPh-pg-dIx" secondAttribute="bottom" constant="-2" id="ekv-AW-2Tr"/>
+                            <constraint firstAttribute="trailing" secondItem="1SC-hr-ujP" secondAttribute="trailing" id="hd8-qx-604"/>
+                            <constraint firstAttribute="width" secondItem="1SC-hr-ujP" secondAttribute="height" multiplier="1:1" id="oZ5-tv-6Nz"/>
+                            <constraint firstItem="hPh-pg-dIx" firstAttribute="leading" secondItem="NlJ-9n-75c" secondAttribute="leading" id="sJX-E9-RcX"/>
+                            <constraint firstItem="hPh-pg-dIx" firstAttribute="top" secondItem="1SC-hr-ujP" secondAttribute="bottom" id="uRI-hq-uSV"/>
                         </constraints>
-                        <connections>
-                            <outletCollection property="gestureRecognizers" destination="fjO-BR-UvX" appends="YES" id="6Cb-rU-Rda"/>
-                        </connections>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="currentPhoto" destination="Pv1-PJ-lR7" id="MCo-Hc-qMJ"/>
                         <outlet property="nextPhoto" destination="QWg-qc-PRi" id="ms2-0J-3ZG"/>
+                        <outlet property="photoContainer" destination="1SC-hr-ujP" id="pFa-PE-KSL"/>
                         <outlet property="shareButton" destination="TGs-QZ-hm0" id="2xQ-X2-y5B"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rnh-Ze-pbN" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="fjO-BR-UvX">
+                <tapGestureRecognizer id="rp2-Ju-B2v" userLabel="Preview Tap Gesture Recognizer">
                     <connections>
-                        <action selector="tapRecognizerPressed:" destination="Wo6-KZ-lzq" id="Wq6-bR-1gW"/>
+                        <action selector="previewViewTapped:" destination="Wo6-KZ-lzq" id="yne-5R-fDq"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>

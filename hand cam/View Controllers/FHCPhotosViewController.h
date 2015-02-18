@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AAPLPreviewView.h"
 
 @class PhotoView;
 
@@ -14,13 +15,14 @@
 
 @property (nonatomic) NSInteger currentIndex; // which photo are we showing?
 
+@property (nonatomic, weak) IBOutlet UIView *photoContainer;
 @property (nonatomic, strong) IBOutlet PhotoView *currentPhoto;
 @property (nonatomic, strong) IBOutlet PhotoView *nextPhoto;
 
+@property (nonatomic, weak) IBOutlet AAPLPreviewView *previewView;
+- (IBAction)previewViewTapped:(id)sender;
+
 @property (nonatomic, weak) IBOutlet UIButton *shareButton;
-
-- (IBAction)tapRecognizerPressed:(id)sender;
-
 - (IBAction)shareButtonPressed:(id)sender;
 
 @end

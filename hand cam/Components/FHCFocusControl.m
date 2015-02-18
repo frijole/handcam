@@ -99,7 +99,7 @@
         // set up indicator
         UIView *tmpIndicator = [[UIView alloc] initWithFrame:CGRectZero];
         [tmpIndicator setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [tmpIndicator setBackgroundColor:[UIColor redColor]];
+        [tmpIndicator setBackgroundColor:[UIColor yellowColor]];
         [self addSubview:tmpIndicator];
         
         [self sendSubviewToBack:tmpIndicator];
@@ -153,6 +153,7 @@
     // NSLog(@"rotated %.2f radians, value was %@ change is %@", rotationRecognizer.rotation, @(self.value), @(tmpNewValue));
     
     [self setValue:tmpNewValue];
+    [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
 - (void)setNumberOfLines:(NSInteger)numberOfLines
@@ -188,8 +189,6 @@
     }
     
     _value = value;
-    
-    [self sendActionsForControlEvents:UIControlEventValueChanged];
     
     [self updateDisplay];
 }

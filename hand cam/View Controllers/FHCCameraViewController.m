@@ -394,7 +394,8 @@ static void *ISOContext = &ISOContext;
 
 - (void)thumbnailTapped:(id)sender
 {
-    [self performSegueWithIdentifier:@"showPhotosSegue" sender:nil];    
+    // TODO: customize segue
+    [self performSegueWithIdentifier:@"showPhotosSegue" sender:nil];
 }
 
 - (void)deviceOrientationChanged {
@@ -1004,14 +1005,14 @@ static void *ISOContext = &ISOContext;
     [[NSNotificationCenter defaultCenter] removeObserver:[self runtimeErrorHandlingObserver]];
     
     [self removeObserver:self forKeyPath:@"sessionRunningAndDeviceAuthorized" context:SessionRunningAndDeviceAuthorizedContext];
-    [self removeObserver:self forKeyPath:@"stillImageOutput.capturingStillImage" context:CapturingStillImageContext];
+//    [self removeObserver:self forKeyPath:@"stillImageOutput.capturingStillImage" context:CapturingStillImageContext];
     
-    [self removeObserver:self forKeyPath:@"videoDevice.focusMode" context:FocusModeContext];
-    [self removeObserver:self forKeyPath:@"videoDevice.lensPosition" context:LensPositionContext];
+//    [self removeObserver:self forKeyPath:@"videoDevice.focusMode" context:FocusModeContext];
+//    [self removeObserver:self forKeyPath:@"videoDevice.lensPosition" context:LensPositionContext];
     
-    [self removeObserver:self forKeyPath:@"videoDevice.exposureMode" context:ExposureModeContext];
-    [self removeObserver:self forKeyPath:@"videoDevice.exposureDuration" context:ExposureDurationContext];
-    [self removeObserver:self forKeyPath:@"videoDevice.ISO" context:ISOContext];
+//    [self removeObserver:self forKeyPath:@"videoDevice.exposureMode" context:ExposureModeContext];
+//    [self removeObserver:self forKeyPath:@"videoDevice.exposureDuration" context:ExposureDurationContext];
+//    [self removeObserver:self forKeyPath:@"videoDevice.ISO" context:ISOContext];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
